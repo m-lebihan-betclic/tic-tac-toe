@@ -1,0 +1,20 @@
+name: givn
+description: 'A state of the art testing framework for Flutter.'
+version: 0.0.1
+
+environment:
+  flutter: ">=3.27.0"
+  sdk: ">=3.11.0 <4.0.0"
+resolution: workspace
+
+dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.4.3
+  riverpod: ^3.2.1
+  riverpod_annotation: ^4.0.2
+
+dev_dependencies:
+  build_runner: ^2.11.1
+  riverpod_generator: ^4.0.3
+  shouldly: ^0.5.0+1

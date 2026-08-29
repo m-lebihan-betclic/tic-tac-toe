@@ -1,0 +1,40 @@
+# Toolchain and workspace tasks. Run `mise install`, then `mise run bs`.
+[tools]
+# Pinned: every package in the workspace builds on one Flutter version, and mise installs it.
+flutter = "3.44.4"
+
+[tasks.bs]
+description = "Resolve dependencies and bootstrap the workspace"
+run = ["dart pub get", "dart run melos bootstrap"]
+
+[tasks.generate]
+description = "Generate code (riverpod, freezed, auto_route, theme_tailor)"
+run = "dart run melos run generate"
+
+[tasks.analyze]
+description = "Static analysis across the whole workspace"
+run = "dart run melos run analyze"
+
+[tasks.test]
+description = "Run the tests of every package that has any"
+run = "dart run melos run test"
+
+[tasks.goldens]
+description = "Run the golden tests"
+run = "dart run melos run goldens"
+
+[tasks.goldens-update]
+description = "Regenerate golden baselines. Review every changed PNG before committing."
+run = "dart run melos run goldens-update"
+
+[tasks.fix]
+description = "Apply automated lint fixes, then format"
+run = ["dart run melos exec -c 1 -- dart fix --apply", "dart run melos run format"]
+
+[tasks.format]
+description = "Format source code (120 columns, generated code excluded)"
+run = "dart run melos run format"
+
+[tasks.l10n]
+description = "Regenerate localisations from the ARB files"
+run = "cd packages/dsm/l10n && flutter gen-l10n"

@@ -1,0 +1,42 @@
+import 'package:app_providers/app_providers.dart';
+import 'package:app_router/app_router.dart';
+import 'package:design_providers/design_providers.dart';
+import 'package:design_tokens/design_tokens.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:l10n/l10n.dart';
+
+Widget buildApplication() => ProviderScope(overrides: appProviders(), child: const _Application());
+
+class _Application extends ConsumerWidget {
+  const _Application();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final palette = ref.watch(appPaletteProvider);
+    final typography = ref.watch(appTypographyProvider);
+
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      onGenerateTitle: (context) => context.l10n.appTitle,
+      routerConfig: ref.watch(appRouterProvider).config(),
+      supportedLocales: AppLocalizations.supportedLocales,
+      // The 200ms `themeSwitch` in the spec is this, plus AppPalette.lerp: MaterialApp animates
+      // its ThemeData, so switching theme fades the whole tree instead of cutting.
+      themeAnimationDuration: AppMotion.themeSwitch,
+      // Material is only ever the host: it carries the two extensions and settles nothing else.
+      // Every colour, size and type style a screen uses comes from these extensions or from a
+      // feature theme built out of them — never from `colorScheme`, and never from `ThemeData`.
+      //
+      // That is why there is no `scaffoldBackgroundColor`. Each screen's Scaffold takes its
+      // background from its own feature theme, which is the seam composition overrides through
+      // `bindProviders`; a theme-level default would quietly paint screens that never asked, and
+      // one that forgets is better off looking obviously wrong than looking right by accident.
+      theme: ThemeData(
+        extensions: <ThemeExtension<dynamic>>[palette, typography],
+        useMaterial3: true,
+      ),
+    );
+  }
+}

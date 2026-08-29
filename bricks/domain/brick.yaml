@@ -1,0 +1,18 @@
+name: domain
+description: Scaffold a domain layer that follows the repo conventions (entities, contracts, behaviors, provider triple).
+version: 1.0.0
+
+environment:
+  mason: ">=0.1.0 <0.2.0"
+
+vars:
+  name:
+    type: string
+    description: Package name (snake_case), e.g. game_domain.
+    default: my_feature_domain
+    prompt: Package name?
+  classname:
+    type: string
+    description: Feature name (snake_case), e.g. game.
+    default: my_feature
+    prompt: Feature name?

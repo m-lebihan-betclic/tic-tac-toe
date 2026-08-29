@@ -1,0 +1,23 @@
+name: presentation
+description: Scaffold a presentation layer that follows the repo conventions (screen, routing port, theme_tailor theme, provider triple).
+version: 1.0.0
+
+environment:
+  mason: ">=0.1.0 <0.2.0"
+
+vars:
+  name:
+    type: string
+    description: Package name (snake_case), e.g. game_presentation.
+    default: my_feature_presentation
+    prompt: Package name?
+  classname:
+    type: string
+    description: Feature name (snake_case), e.g. game.
+    default: my_feature
+    prompt: Feature name?
+  domainPackage:
+    type: string
+    description: Name of the domain package this screen consumes.
+    default: my_feature_domain
+    prompt: Domain package name?

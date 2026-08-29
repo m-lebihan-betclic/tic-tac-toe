@@ -1,0 +1,8 @@
+name: exceptions
+description: "A package for common exception."
+version: 0.0.1
+
+environment:
+  flutter: ">=3.27.0"
+  sdk: ">=3.11.0 <4.0.0"
+resolution: workspace

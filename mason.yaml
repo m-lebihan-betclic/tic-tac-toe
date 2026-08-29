@@ -1,0 +1,7 @@
+bricks:
+  data:
+    path: bricks/data
+  domain:
+    path: bricks/domain
+  presentation:
+    path: bricks/presentation

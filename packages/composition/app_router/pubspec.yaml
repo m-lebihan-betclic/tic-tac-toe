@@ -1,0 +1,25 @@
+name: app_router
+description: The application router (auto_route) and the concrete implementations of every feature routing port.
+version: 1.0.0
+publish_to: none
+
+environment:
+  flutter: ">=3.27.0"
+  sdk: ">=3.11.0 <4.0.0"
+resolution: workspace
+
+dependencies:
+  auto_route: ^11.1.0
+  flutter:
+    sdk: flutter
+  riverpod_annotation: ^4.0.2
+  splash_presentation:
+
+dev_dependencies:
+  auto_route_generator: ^10.4.0
+  build_runner: ^2.15.0
+  flutter_test:
+    sdk: flutter
+  givn:
+  riverpod_generator: ^4.0.3
+  shouldly: ^0.5.0+1

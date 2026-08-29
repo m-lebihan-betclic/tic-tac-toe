@@ -1,0 +1,52 @@
+name: tic_tac_toe
+description: Tic-Tac-Toe — local play, human against a CPU opponent.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  flutter: ">=3.27.0"
+  sdk: ">=3.11.0 <4.0.0"
+resolution: workspace
+
+dependencies:
+  app_providers:
+  app_router:
+  design_providers:
+  design_tokens:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.2.1
+  l10n:
+
+dev_dependencies:
+  flutter_launcher_icons: ^0.14.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+# Build-time only: reads the two PNGs and writes the platform icon sets, which are committed.
+# The sources live outside any bundled `assets/` declaration so they never ship in the binary.
+flutter_launcher_icons:
+  # Android keeps the dark icon at every appearance: its adaptive background is a flat
+  # `#0B0C0E`, and the platform offers no light/dark variant to pair with it.
+  image_path: "../../assets/launcher/launcher_icon_1024.png"
+  android: true
+  ios: true
+  # iOS 18+ takes three appearances. The default is the light palette, so the icon stops being
+  # a black tile on a light home screen; the other two are transparent by design — iOS supplies
+  # the dark backdrop and the tint itself, which is the only place an iOS icon may carry alpha.
+  image_path_ios: "../../assets/launcher/launcher_icon_light_1024.png"
+  image_path_ios_dark_transparent: "../../assets/launcher/launcher_icon_dark_1024.png"
+  image_path_ios_tinted_grayscale: "../../assets/launcher/launcher_icon_tinted_1024.png"
+  # The source is already opaque RGB; this is a guard, since the App Store rejects iOS icons
+  # that carry an alpha channel.
+  remove_alpha_ios: true
+  # Flat colour rather than an image, which is why there is no adaptive *background* asset.
+  adaptive_icon_background: "#0B0C0E"
+  adaptive_icon_foreground: "../../assets/launcher/launcher_adaptive_foreground_1024.png"
+  # The artwork is already drawn for Android's safe zone (the mark spans the centre 43% of the
+  # canvas), so the tool's default 16% inset would pad it twice and leave the mark visibly
+  # smaller than the iOS icon.
+  adaptive_icon_foreground_inset: 0

@@ -1,0 +1,117 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Morpion",
+  "splashWordmark": "MORPION",
+  "@splashWordmark": {
+    "description": "The splash wordmark. Set as drawn: uppercase and unhyphenated, not a transform of appTitle."
+  },
+  "splashTagline": "Partie locale · contre le CPU",
+  "setupTitle": "Qui joue ?",
+  "setupSubtitle": "Choisis un nom.",
+  "setupStart": "Commencer",
+  "labelTheme": "THÈME",
+  "labelLanguage": "LANGUE",
+  "labelDifficulty": "DIFFICULTÉ",
+  "difficultyEasy": "Facile",
+  "difficultyHard": "Difficile",
+  "difficultyNote": "S'applique à la manche suivante.",
+  "labelPlayer": "JOUEUR",
+  "themeLight": "Clair",
+  "themeDark": "Sombre",
+  "themeMatrix": "Matrix",
+  "languageEnglish": "English",
+  "languageFrench": "Français",
+  "settingsTitle": "Réglages",
+  "settingsChange": "Modifier",
+  "settingsFooter": "Version {version} · Changer de thème ou de langue n'interrompt jamais une partie en cours.",
+  "@settingsFooter": {
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+  "labelYourTurn": "À TOI",
+  "labelCpu": "CPU",
+  "labelTaken": "OCCUPÉE",
+  "labelGameOver": "PARTIE TERMINÉE",
+  "statusPlayerTurn": "À toi, {name}.",
+  "@statusPlayerTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ada"
+      }
+    }
+  },
+  "statusCpuTurn": "Réflexion…",
+  "errorSlotTaken": "Choisis une case libre.",
+  "resultWon": "Bien joué, {name}.",
+  "@resultWon": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ada"
+      }
+    }
+  },
+  "resultLost": "Le CPU l'emporte.",
+  "resultDraw": "Match nul.",
+  "statusReset": "Plateau effacé. À toi, {name}.",
+  "@statusReset": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ada"
+      }
+    }
+  },
+  "actionReset": "Recommencer",
+  "actionNewGame": "Nouvelle partie",
+  "scoreYou": "TOI",
+  "scoreCpu": "CPU",
+  "scoreDraw": "NULS",
+  "historyTitle": "Cette session",
+  "historyWon": "GAGNÉES",
+  "historyLost": "PERDUES",
+  "historyDrawn": "NULLES",
+  "historyRounds": "PARTIES",
+  "historyRoundWon": "Gagnée · {line}",
+  "@historyRoundWon": {
+    "placeholders": {
+      "line": {
+        "type": "String",
+        "example": "colonne gauche"
+      }
+    }
+  },
+  "historyRoundLost": "Perdue · {line}",
+  "@historyRoundLost": {
+    "placeholders": {
+      "line": {
+        "type": "String",
+        "example": "ligne du milieu"
+      }
+    }
+  },
+  "historyRoundDrawn": "Nulle · {moves} coups",
+  "@historyRoundDrawn": {
+    "placeholders": {
+      "moves": {
+        "type": "int",
+        "example": "9"
+      }
+    }
+  },
+  "historyEmpty": "Rien pour l'instant. Lance une partie.",
+  "historyFooter": "Effacé à la fermeture de l'app. Aucune persistance.",
+  "lineTopRow": "ligne du haut",
+  "lineMiddleRow": "ligne du milieu",
+  "lineBottomRow": "ligne du bas",
+  "lineLeftColumn": "colonne de gauche",
+  "lineMiddleColumn": "colonne du milieu",
+  "lineRightColumn": "colonne de droite",
+  "lineDiagonalDown": "diagonale descendante",
+  "lineDiagonalUp": "diagonale montante"
+}

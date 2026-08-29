@@ -1,0 +1,117 @@
+{
+  "@@locale": "en",
+  "appTitle": "Tic-Tac-Toe",
+  "splashWordmark": "TIC TAC TOE",
+  "@splashWordmark": {
+    "description": "The splash wordmark. Set as drawn: uppercase and unhyphenated, not a transform of appTitle."
+  },
+  "splashTagline": "Local play · vs CPU",
+  "setupTitle": "Who's playing?",
+  "setupSubtitle": "Pick a name.",
+  "setupStart": "Start playing",
+  "labelTheme": "THEME",
+  "labelLanguage": "LANGUAGE",
+  "labelDifficulty": "DIFFICULTY",
+  "difficultyEasy": "Easy",
+  "difficultyHard": "Hard",
+  "difficultyNote": "Applies to the next round.",
+  "labelPlayer": "PLAYER",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeMatrix": "Matrix",
+  "languageEnglish": "English",
+  "languageFrench": "Français",
+  "settingsTitle": "Settings",
+  "settingsChange": "Change",
+  "settingsFooter": "Version {version} · Changing theme or language never interrupts a game in progress.",
+  "@settingsFooter": {
+    "placeholders": {
+      "version": {
+        "type": "String",
+        "example": "1.0.0"
+      }
+    }
+  },
+  "labelYourTurn": "YOUR TURN",
+  "labelCpu": "CPU",
+  "labelTaken": "TAKEN",
+  "labelGameOver": "GAME OVER",
+  "statusPlayerTurn": "Go on, {name}.",
+  "@statusPlayerTurn": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ada"
+      }
+    }
+  },
+  "statusCpuTurn": "Thinking…",
+  "errorSlotTaken": "Pick an empty square.",
+  "resultWon": "You got it, {name}.",
+  "@resultWon": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ada"
+      }
+    }
+  },
+  "resultLost": "CPU takes it.",
+  "resultDraw": "Draw. Nobody blinked.",
+  "statusReset": "Board cleared. Your turn, {name}.",
+  "@statusReset": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Ada"
+      }
+    }
+  },
+  "actionReset": "Reset game",
+  "actionNewGame": "New game",
+  "scoreYou": "YOU",
+  "scoreCpu": "CPU",
+  "scoreDraw": "DRAW",
+  "historyTitle": "This session",
+  "historyWon": "WON",
+  "historyLost": "LOST",
+  "historyDrawn": "DRAWN",
+  "historyRounds": "ROUNDS",
+  "historyRoundWon": "Won · {line}",
+  "@historyRoundWon": {
+    "placeholders": {
+      "line": {
+        "type": "String",
+        "example": "left column"
+      }
+    }
+  },
+  "historyRoundLost": "Lost · {line}",
+  "@historyRoundLost": {
+    "placeholders": {
+      "line": {
+        "type": "String",
+        "example": "middle row"
+      }
+    }
+  },
+  "historyRoundDrawn": "Drawn · {moves} moves",
+  "@historyRoundDrawn": {
+    "placeholders": {
+      "moves": {
+        "type": "int",
+        "example": "9"
+      }
+    }
+  },
+  "historyEmpty": "Nothing yet. Play a round.",
+  "historyFooter": "Cleared when the app closes. No storage layer.",
+  "lineTopRow": "top row",
+  "lineMiddleRow": "middle row",
+  "lineBottomRow": "bottom row",
+  "lineLeftColumn": "left column",
+  "lineMiddleColumn": "middle column",
+  "lineRightColumn": "right column",
+  "lineDiagonalDown": "diagonal",
+  "lineDiagonalUp": "anti-diagonal"
+}

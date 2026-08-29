@@ -1,0 +1,62 @@
+name: tic_tac_toe_workspace
+description: Dart pub workspace for the Tic-Tac-Toe app.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+
+# Dart pub workspace: every app and package resolves its dependencies together,
+# so a version is declared once and shared by all of them.
+workspace:
+  - apps/*
+  - packages/**/*
+
+dev_dependencies:
+  melos: ^7.3.0
+  very_good_analysis: ^6.0.0
+
+melos:
+  name: tic_tac_toe_workspace
+
+  scripts:
+    analyze:
+      # The analysis server crashes when several `dart analyze` run in parallel,
+      # so concurrency defaults to 1. Override with MELOS_ANALYZE_CONCURRENCY.
+      run: melos exec -c ${MELOS_ANALYZE_CONCURRENCY:-1} -- dart analyze .
+      description: Static analysis across the whole workspace.
+
+    test:
+      run: melos exec -c 1 --dir-exists=test -- flutter test
+      description: Run the tests of every package that has any.
+
+    generate:
+      run: melos exec --depends-on=build_runner -- dart run build_runner build --delete-conflicting-outputs
+      description: Code generation (riverpod, freezed, auto_route, theme_tailor).
+
+    goldens:
+      run: melos exec -c 1 --dir-exists=test/golden -- flutter test test/golden
+      description: Run the golden tests.
+
+    goldens-update:
+      run: melos exec -c 1 --dir-exists=test/golden -- flutter test test/golden --update-goldens
+      description: Regenerate golden baselines. Review every changed PNG before committing.
+
+    format:
+      # Generated code is left alone: build_runner writes it at its own width and
+      # reformatting to 120 would make it diverge on every codegen run.
+      # `bricks/` is excluded too — those are mustache templates, not valid Dart.
+      run: |
+        # The list is materialised first: an empty result must NOT reach `dart format`
+        # with no path, or it would format the whole current directory.
+        FORMAT_FILES=$(find apps packages -type f -name "*.dart" \
+          -not -path "*/.dart_tool/*" \
+          -not -path "*/build/*" \
+          -not -name "*.freezed.dart" \
+          -not -name "*.g.dart" \
+          -not -name "*.gr.dart" \
+          -not -name "*.mocks.dart" \
+          -not -name "*.tailor.dart")
+
+        if [ -n "$FORMAT_FILES" ]; then printf '%s\n' "$FORMAT_FILES" | xargs dart format; fi
+      description: Format source code (120 columns, generated code excluded).

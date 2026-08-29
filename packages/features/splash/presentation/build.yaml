@@ -1,0 +1,12 @@
+targets:
+  $default:
+    builders:
+      riverpod_generator:
+        generate_for:
+          - "**/*.br.dart"
+      theme_tailor:
+        generate_for:
+          - "**/*.br.dart"
+      auto_route_generator:
+        generate_for:
+          - "**/*.br.dart"

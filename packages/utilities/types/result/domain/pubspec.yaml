@@ -1,0 +1,12 @@
+name: types_result_domain
+description: "Result type shared across layers: a call either succeeds or fails, never throws."
+version: 0.0.1
+
+environment:
+  flutter: ">=3.27.0"
+  sdk: ">=3.11.0 <4.0.0"
+resolution: workspace
+
+dependencies:
+  mockito: ^5.4.6
+  result_dart: ^2.1.1
