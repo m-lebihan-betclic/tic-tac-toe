@@ -1,24 +1,14 @@
 import 'package:game_domain/game_domain.dart';
-import 'package:game_domain/src/behaviors/reset_round.dart';
 import 'package:game_domain/src/behaviors/start_round.dart';
 import 'package:givn/givn.dart';
 import 'package:session_domain/session_domain.dart';
 import 'package:shouldly/shouldly.dart';
 
-import '../../../support/layout.dart';
-
 void main() {
-  given(
-        'a game in progress on a hard board',
-        (_) => gameOf(
-          'XO./.X./...',
-          status: const GameStatus.cpuTurn(),
-          difficulty: Difficulty.hard,
-        ),
-      )
-      .when('the player resets the round', (sut, _) => const ResetRound()(sut))
+  given('nothing but a chosen level', (_) => Difficulty.hard)
+      .when('a round begins', (sut, _) => const StartRound()(difficulty: sut))
       .then(
-        "the board is empty, it is the player's turn, and the level is unchanged",
+        "the board is empty and it is the player's turn",
         (result, _) => result.should.be(Game.initial(difficulty: Difficulty.hard)),
       );
 

@@ -139,47 +139,6 @@ final class PlayMoveProvider
 
 String _$playMoveHash() => r'a5828e8c6c502f20cf604829b8ee98c6e57cf9de';
 
-@ProviderFor(resetRound)
-final resetRoundProvider = ResetRoundProvider._();
-
-final class ResetRoundProvider
-    extends $FunctionalProvider<ResetRoundFun, ResetRoundFun, ResetRoundFun>
-    with $Provider<ResetRoundFun> {
-  ResetRoundProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'resetRoundProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$resetRoundHash();
-
-  @$internal
-  @override
-  $ProviderElement<ResetRoundFun> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  ResetRoundFun create(Ref ref) {
-    return resetRound(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ResetRoundFun value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<ResetRoundFun>(value),
-    );
-  }
-}
-
-String _$resetRoundHash() => r'd6c4d8df9ef70f653bd09ee74357b71fc509af9f';
-
 @ProviderFor(startRound)
 final startRoundProvider = StartRoundProvider._();
 

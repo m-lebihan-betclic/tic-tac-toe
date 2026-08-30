@@ -4,7 +4,6 @@ import 'package:game_domain/src/behaviors/easy_cpu.dart';
 import 'package:game_domain/src/behaviors/hard_cpu.dart';
 import 'package:game_domain/src/behaviors/play_cpu_move.dart';
 import 'package:game_domain/src/behaviors/play_move.dart';
-import 'package:game_domain/src/behaviors/reset_round.dart';
 import 'package:game_domain/src/behaviors/start_round.dart';
 import 'package:game_domain/src/entities/game.br.dart';
 import 'package:game_domain/src/entities/move_error.br.dart';
@@ -21,7 +20,12 @@ List<Override> bindProviders() => const <Override>[];
 
 typedef PlayCpuMoveFun = Result<Game, MoveError> Function(Game game);
 typedef PlayMoveFun = Result<Game, MoveError> Function(Game game, int slot);
-typedef ResetRoundFun = Game Function(Game game);
+
+/// Begins a round — the session's first, and every one after a reset or a finished game.
+///
+/// There is deliberately no separate `ResetRound`. Clearing the board *is* beginning the next
+/// round, and a behavior that carried the old level forward is what made the caption under the
+/// settings control ("Applies to the next round.") a promise the app could not keep.
 typedef StartRoundFun = Game Function({required Difficulty difficulty});
 
 // Public API: the *result* of a behavior, or its bare `call` when the caller invokes it later.
@@ -40,9 +44,6 @@ PlayCpuMoveFun playCpuMove(Ref ref) => PlayCpuMove(
 
 @riverpod
 PlayMoveFun playMove(Ref ref) => const PlayMove().call;
-
-@riverpod
-ResetRoundFun resetRound(Ref ref) => const ResetRound().call;
 
 @riverpod
 StartRoundFun startRound(Ref ref) => const StartRound().call;

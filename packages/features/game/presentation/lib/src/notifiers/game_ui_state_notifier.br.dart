@@ -28,22 +28,29 @@ class GameUiStateNotifier extends _$GameUiStateNotifier {
 
     return GameUiState(
       banner: const StatusBanner.turn(),
-      // Difficulty comes from the stored preference once there is one to read; until then a
-      // session starts at the domain's own default.
-      game: ref.read(startRoundProvider)(
-        difficulty: ref.watch(storedDifficultyProvider) ?? Difficulty.initial,
-      ),
+      game: ref.read(startRoundProvider)(difficulty: _storedDifficulty),
       scores: const Scores(),
     );
   }
 
+  /// Read, never watched. A `ref.watch` here would re-run `build()` the moment settings stored a
+  /// new level — which does not "apply the level to the round", it replaces the whole state: an
+  /// empty board, the scores back to zero, mid-game. The level is a fact the round is *started*
+  /// with and then carries on [Game], which is exactly why it lives there.
+  Difficulty get _storedDifficulty => ref.read(storedDifficultyProvider) ?? Difficulty.initial;
+
   /// Clears the board immediately, no confirmation. Enabled during the CPU's turn, which is
   /// exactly why the beat has to be cancellable.
+  ///
+  /// This is where a level changed in settings lands: clearing the board begins the next round,
+  /// and the next round is what the caption under that control promises. Scores are untouched —
+  /// they are derived from finished rounds and a reset finishes none, which is also why a reset
+  /// is not a loss.
   void reset() {
     _cancelBeat();
     state = state.copyWith(
       banner: const StatusBanner.cleared(),
-      game: ref.read(resetRoundProvider)(state.game),
+      game: ref.read(startRoundProvider)(difficulty: _storedDifficulty),
     );
   }
 

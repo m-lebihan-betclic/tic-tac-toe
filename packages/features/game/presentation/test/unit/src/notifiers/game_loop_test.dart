@@ -11,6 +11,25 @@ import 'package:game_presentation/src/notifiers/game_ui_state_notifier.br.dart';
 import 'package:game_presentation/src/state/status_banner.br.dart';
 import 'package:l10n/l10n.dart';
 import 'package:session_domain/session_domain.dart';
+import 'package:session_domain/session_domain.dart' as session_domain;
+
+/// Nothing is stored, which is the state a cold start is in: the notifier falls back to
+/// `Difficulty.initial`. The contract still has to be fed — an unfed one throws, by design.
+final class _EmptyPreferences implements PreferencesRepository {
+  const _EmptyPreferences();
+  @override
+  Difficulty? readDifficulty() => null;
+  @override
+  AppLocale? readLocale() => null;
+  @override
+  AppTheme? readTheme() => null;
+  @override
+  void writeDifficulty(Difficulty difficulty) {}
+  @override
+  void writeLocale(AppLocale locale) {}
+  @override
+  void writeTheme(AppTheme theme) {}
+}
 
 final class _NoopRouting implements game_presentation.GameRouting {
   const _NoopRouting();
@@ -25,6 +44,11 @@ ProviderContainer _container() => ProviderContainer(
     ...design_providers.bindProviders(
       palette: Provider<AppPalette>((ref) => AppPalette.light()),
       typography: Provider<AppTypography>((ref) => AppTypography.system()),
+    ),
+    // Only the direct dependency, and through the public seam: the board reads the level through
+    // `session_domain`, so that is what a test feeds — never a `providers_di` symbol.
+    ...session_domain.bindProviders(
+      preferences: Provider<PreferencesRepository>((ref) => const _EmptyPreferences()),
     ),
     ...game_presentation.bindProviders(
       player: Provider<Player>((ref) => Player.create('Morgan').getOrNull()!),
