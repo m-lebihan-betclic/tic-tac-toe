@@ -11,8 +11,10 @@ resolution: workspace
 dependencies:
   exceptions:
   freezed_annotation: ^3.1.0
+  meta: ^1.17.0
   riverpod: ^3.2.1
   riverpod_annotation: ^4.0.2
+  types_result_domain:
 
 dev_dependencies:
   build_runner: ^2.15.0

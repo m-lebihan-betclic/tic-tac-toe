@@ -1,2 +1,12 @@
+export 'src/entities/app_locale.dart';
+export 'src/entities/app_theme.dart';
+export 'src/entities/difficulty.dart';
+export 'src/entities/game_outcome.dart';
+export 'src/entities/player.dart';
+export 'src/entities/round.br.dart';
+export 'src/entities/scores.br.dart';
+export 'src/entities/winning_line.dart';
 export 'src/providers.br.dart';
-export 'src/repositories/session_repository.dart';
+export 'src/repositories/history_repository.dart';
+export 'src/repositories/player_repository.dart';
+export 'src/repositories/preferences_repository.dart';

@@ -68,4 +68,4 @@ final class DefaultSplashThemeProvider
 }
 
 String _$defaultSplashThemeHash() =>
-    r'fb668791aa3f56e785e27aaf4ef4f55ff1949c2f';
+    r'984b56cf0bcfb13d1cce53fc444fac3462df6031';
