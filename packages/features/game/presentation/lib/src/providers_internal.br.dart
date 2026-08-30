@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:design_providers/design_providers.dart';
 import 'package:design_tokens/design_tokens.dart';
 import 'package:game_presentation/src/theme/game_theme.br.dart';
@@ -18,7 +20,7 @@ GameTheme defaultGameTheme(Ref ref) {
 
   return GameTheme(
     backgroundColor: palette.background,
-    cellColor: palette.background,
+    cellColor: palette.surface,
     cellPressedColor: palette.surfacePressed,
     cpuDotColor: palette.markCpu,
     drawnDotColor: palette.onSurfaceMuted,
@@ -42,3 +44,22 @@ GameTheme defaultGameTheme(Ref ref) {
 
 /// The dot inside a pressed empty cell, drawn at 40% of the outline colour.
 const double _pressedDotOpacity = 0.4;
+
+/// How long the CPU appears to think, drawn fresh each turn from
+/// [AppMotion.cpuThinkingMin]..[AppMotion.cpuThinkingDelay] in [AppMotion.cpuThinkingStep]
+/// increments.
+///
+/// Presentation, not a rule: the domain plays instantly, and this is only what the player sees
+/// while nothing is happening. A test overrides it to make the wait deterministic.
+@riverpod
+Duration cpuBeat(Ref ref) {
+  final int min = AppMotion.cpuThinkingMin.inMilliseconds;
+  final int max = AppMotion.cpuThinkingDelay.inMilliseconds;
+  final int step = AppMotion.cpuThinkingStep.inMilliseconds;
+
+  return Duration(milliseconds: min + ref.watch(cpuBeatRandomProvider).nextInt((max - min) ~/ step + 1) * step);
+}
+
+/// The seeded seam. Nothing but a test has a reason to override it.
+@riverpod
+Random cpuBeatRandom(Ref ref) => Random();

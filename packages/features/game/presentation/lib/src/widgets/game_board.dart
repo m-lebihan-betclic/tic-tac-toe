@@ -44,6 +44,10 @@ class GameBoard extends ConsumerWidget {
         aspectRatio: 1,
         child: DecoratedBox(
           decoration: BoxDecoration(
+            // The grid colour fills the container and shows through the hairline gaps, so the
+            // lines are the background rather than nine borders doubling up where cells meet.
+            // The same colour outlines it, which is what closes the panel on its outer edge.
+            border: Border.all(color: theme.gridColor, width: AppSizing.hairline),
             borderRadius: BorderRadius.circular(AppRadius.board),
             color: theme.gridColor,
           ),

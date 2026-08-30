@@ -1,4 +1,5 @@
 import 'package:design_components/design_components.dart';
+import 'package:design_tokens/design_tokens.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:game_presentation/src/notifiers/game_ui_state_notifier.br.dart';
@@ -8,14 +9,18 @@ import 'package:game_presentation/src/theme/game_theme.br.dart';
 import 'package:l10n/l10n.dart';
 import 'package:session_domain/session_domain.dart';
 
-/// The session tally. Read-only, so no press treatment anywhere in it.
+/// The level on the left, the session tally on the right. Read-only, so no press treatment
+/// anywhere in it — a surface that reacts to touch and then does nothing is worse than one that
+/// ignores it.
 class ScoreRow extends ConsumerWidget {
   const ScoreRow({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final Difficulty difficulty = ref.watch(gameUiStateProvider.select((s) => s.game.difficulty));
     final Scores scores = ref.watch(gameUiStateProvider.select((s) => s.scores));
-    final GameOutcome? justWon = ref.watch(
+    // On the result screen the counter that just moved is coloured; the other two stay plain.
+    final GameOutcome? justEnded = ref.watch(
       gameUiStateProvider.select(
         (s) => switch (s.banner) {
           Over(:final GameOutcome outcome) => outcome,
@@ -26,15 +31,27 @@ class ScoreRow extends ConsumerWidget {
     final GameTheme theme = ref.watch(gameThemeProvider);
     final AppLocalizations l10n = context.l10n;
 
-    // On the result screen the counter that just moved is coloured; the other two stay plain.
-    Color? accentFor(GameOutcome outcome) => justWon == outcome ? theme.winLineColor : null;
+    Color? accentFor(GameOutcome outcome) => justEnded == outcome ? theme.winLineColor : null;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        AppStat(accent: accentFor(GameOutcome.won), label: l10n.scoreYou, value: '${scores.won}'),
-        AppStat(accent: accentFor(GameOutcome.drawn), label: l10n.scoreDraw, value: '${scores.drawn}'),
-        AppStat(accent: accentFor(GameOutcome.lost), label: l10n.scoreCpu, value: '${scores.lost}'),
+        Text(
+          switch (difficulty) {
+            Difficulty.easy => l10n.difficultyEasy,
+            Difficulty.hard => l10n.difficultyHard,
+          }.toUpperCase(),
+          style: theme.labelStyle,
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          spacing: AppSpacing.spacing400,
+          children: <Widget>[
+            AppStat(accent: accentFor(GameOutcome.won), label: l10n.scoreYou, value: '${scores.won}'),
+            AppStat(accent: accentFor(GameOutcome.lost), label: l10n.scoreCpu, value: '${scores.lost}'),
+            AppStat(accent: accentFor(GameOutcome.drawn), label: l10n.scoreDraw, value: '${scores.drawn}'),
+          ],
+        ),
       ],
     );
   }

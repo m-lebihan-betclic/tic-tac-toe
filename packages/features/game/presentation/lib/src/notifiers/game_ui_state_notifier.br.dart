@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:design_tokens/design_tokens.dart';
 import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/src/providers_di.br.dart';
+import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/state/game_ui_state.br.dart';
 import 'package:game_presentation/src/state/status_banner.br.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -85,7 +85,8 @@ class GameUiStateNotifier extends _$GameUiStateNotifier {
 
   void _scheduleBeat(Game scheduledFor) {
     _cancelBeat();
-    _beat = Timer(AppMotion.cpuThinkingDelay, () {
+    // Re-read per turn: a fixed pause reads as a timer, a varying one as somebody thinking.
+    _beat = Timer(ref.read(cpuBeatProvider), () {
       // A reset landing mid-beat must not deliver the CPU's move to a board that no longer
       // exists. Identity, not equality: a reset produces a different object even when the two
       // boards would compare equal.

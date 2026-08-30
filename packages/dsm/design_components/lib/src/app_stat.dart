@@ -22,7 +22,7 @@ class AppStat extends StatelessWidget {
     final AppPalette palette = context.palette;
     final Color valueColor = accent ?? (value == _zero ? palette.onSurfaceMuted : palette.onSurface);
 
-    return Column(
+    return Row(
       mainAxisSize: MainAxisSize.min,
       spacing: AppSpacing.spacing150,
       children: <Widget>[

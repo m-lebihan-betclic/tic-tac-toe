@@ -67,4 +67,111 @@ final class DefaultGameThemeProvider
   }
 }
 
-String _$defaultGameThemeHash() => r'6826be6f2592ad90a9c3f50a27a72e97eea25267';
+String _$defaultGameThemeHash() => r'eec027640af6b244fa7f156de0fbe254e25c6e42';
+
+/// How long the CPU appears to think, drawn fresh each turn from
+/// [AppMotion.cpuThinkingMin]..[AppMotion.cpuThinkingDelay] in [AppMotion.cpuThinkingStep]
+/// increments.
+///
+/// Presentation, not a rule: the domain plays instantly, and this is only what the player sees
+/// while nothing is happening. A test overrides it to make the wait deterministic.
+
+@ProviderFor(cpuBeat)
+final cpuBeatProvider = CpuBeatProvider._();
+
+/// How long the CPU appears to think, drawn fresh each turn from
+/// [AppMotion.cpuThinkingMin]..[AppMotion.cpuThinkingDelay] in [AppMotion.cpuThinkingStep]
+/// increments.
+///
+/// Presentation, not a rule: the domain plays instantly, and this is only what the player sees
+/// while nothing is happening. A test overrides it to make the wait deterministic.
+
+final class CpuBeatProvider
+    extends $FunctionalProvider<Duration, Duration, Duration>
+    with $Provider<Duration> {
+  /// How long the CPU appears to think, drawn fresh each turn from
+  /// [AppMotion.cpuThinkingMin]..[AppMotion.cpuThinkingDelay] in [AppMotion.cpuThinkingStep]
+  /// increments.
+  ///
+  /// Presentation, not a rule: the domain plays instantly, and this is only what the player sees
+  /// while nothing is happening. A test overrides it to make the wait deterministic.
+  CpuBeatProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cpuBeatProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cpuBeatHash();
+
+  @$internal
+  @override
+  $ProviderElement<Duration> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Duration create(Ref ref) {
+    return cpuBeat(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Duration value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Duration>(value),
+    );
+  }
+}
+
+String _$cpuBeatHash() => r'a64df3efe05a671699d1e5787ae686d222dcf174';
+
+/// The seeded seam. Nothing but a test has a reason to override it.
+
+@ProviderFor(cpuBeatRandom)
+final cpuBeatRandomProvider = CpuBeatRandomProvider._();
+
+/// The seeded seam. Nothing but a test has a reason to override it.
+
+final class CpuBeatRandomProvider
+    extends $FunctionalProvider<Random, Random, Random>
+    with $Provider<Random> {
+  /// The seeded seam. Nothing but a test has a reason to override it.
+  CpuBeatRandomProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cpuBeatRandomProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cpuBeatRandomHash();
+
+  @$internal
+  @override
+  $ProviderElement<Random> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Random create(Ref ref) {
+    return cpuBeatRandom(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Random value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Random>(value),
+    );
+  }
+}
+
+String _$cpuBeatRandomHash() => r'229f945a3e86d2927bf4ad091b61f1cd7d2ca018';

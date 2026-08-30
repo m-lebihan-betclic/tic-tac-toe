@@ -24,30 +24,51 @@ class GameScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: theme.backgroundColor,
+      // The gutter is applied per section rather than to the whole column: the footer hairline
+      // is full-bleed, separating the screen from its edge rather than one row from the next, and
+      // a padded column would inset it along with everything else.
       body: const SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              _AppBar(),
-              SizedBox(height: _statusTop),
-              StatusBlock(),
-              SizedBox(height: _boardTop),
-              GameBoard(),
-              Spacer(),
-              AppSeparator.fullBleed(),
-              SizedBox(height: _footerGap),
-              ScoreRow(),
-              SizedBox(height: _footerGap),
-              _ResetButton(),
-              SizedBox(height: _footerGap),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _Gutter(child: _AppBar()),
+            SizedBox(height: _statusTop),
+            _Gutter(child: StatusBlock()),
+            SizedBox(height: _boardTop),
+            // Expanded, not a fixed board plus a Spacer: the board is square, so sizing it off
+            // the width alone asks for more height than exists the moment the viewport is
+            // shorter than it is wide. Taking the leftover height and centring in it is what
+            // makes one layout correct at 320, at 390 and beyond.
+            Expanded(
+              // Top-aligned, not centred: the board sits directly under the status block and
+              // the slack falls below it, which is where the design puts the breathing room.
+              child: _Gutter(
+                child: Align(alignment: Alignment.topCenter, child: GameBoard()),
+              ),
+            ),
+            AppSeparator.fullBleed(),
+            SizedBox(height: _footerGap),
+            _Gutter(child: ScoreRow()),
+            SizedBox(height: _footerGap),
+            _Gutter(child: _ResetButton()),
+            SizedBox(height: _footerGap),
+          ],
         ),
       ),
     );
   }
+}
+
+class _Gutter extends StatelessWidget {
+  final Widget child;
+
+  const _Gutter({required this.child});
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
+    child: child,
+  );
 }
 
 class _AppBar extends ConsumerWidget {
@@ -99,7 +120,10 @@ class _ResetButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isOver = ref.watch(gameUiStateProvider.select((s) => s.game.status is Finished));
-    final VoidCallback onPressed = ref.read(gameUiStateProvider.notifier).reset;
+    // Nothing to clear on an empty board, so the button says so rather than looking live and
+    // doing nothing. It comes back the moment the first mark lands.
+    final bool hasMoves = ref.watch(gameUiStateProvider.select((s) => s.game.board.moveCount > 0));
+    final VoidCallback? onPressed = hasMoves ? ref.read(gameUiStateProvider.notifier).reset : null;
 
     return isOver
         ? AppButton.primary(label: context.l10n.actionNewGame, onPressed: onPressed)

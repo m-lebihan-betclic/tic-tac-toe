@@ -20,6 +20,12 @@ class AppMotion {
 
   static const Duration cpuThinkingDelay = Duration(milliseconds: 700);
 
+  /// The beat is drawn from [cpuThinkingMin]..[cpuThinkingDelay] in [cpuThinkingStep]
+  /// increments. A fixed pause reads as a timer; a varying one reads as somebody thinking, and
+  /// the range is narrow enough that nobody waits noticeably longer for it.
+  static const Duration cpuThinkingMin = Duration(milliseconds: 300);
+  static const Duration cpuThinkingStep = Duration(milliseconds: 100);
+
   /// The shake fires **once, on the tap** — it reacts to an event. The warning ring and the
   /// status line have a different lifetime: they persist until the next valid move, because they
   /// describe a condition that is still true. Do not drive both from one animation controller.

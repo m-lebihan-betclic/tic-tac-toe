@@ -76,8 +76,7 @@ void main() {
     expect(container.read(gameUiStateProvider).banner, isA<Turn>());
   });
 
-  testWidgets('a reset landing mid-beat cancels it — the CPU never lands on the cleared board',
-      (tester) async {
+  testWidgets('a reset landing mid-beat cancels it — the CPU never lands on the cleared board', (tester) async {
     final ProviderContainer container = _container();
     addTearDown(container.dispose);
     await _pumpScreen(tester, container);

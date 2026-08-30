@@ -16,7 +16,7 @@ class StatusBlock extends ConsumerWidget {
   /// Two lines of [GameTheme.sentenceStyle] plus the label row and its gap. Fixed, because the
   /// board must not shift when the wording changes — and tall enough for two lines, because
   /// `Board cleared. Your turn, {name}.` is two on a narrow screen and one on a wide one.
-  static const double _height = 96;
+  static const double _height = 116;
   static const double _sentenceGap = 12;
   static const double _labelGap = 8;
   static const int _sentenceMaxLines = 2;
