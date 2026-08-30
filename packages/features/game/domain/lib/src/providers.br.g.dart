@@ -8,6 +8,95 @@ part of 'providers.br.dart';
 
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
+/// The seeded seam. A test overrides this provider to make the easy CPU's random choice
+/// repeatable; nothing else has a reason to.
+
+@ProviderFor(cpuRandom)
+final cpuRandomProvider = CpuRandomProvider._();
+
+/// The seeded seam. A test overrides this provider to make the easy CPU's random choice
+/// repeatable; nothing else has a reason to.
+
+final class CpuRandomProvider
+    extends $FunctionalProvider<Random, Random, Random>
+    with $Provider<Random> {
+  /// The seeded seam. A test overrides this provider to make the easy CPU's random choice
+  /// repeatable; nothing else has a reason to.
+  CpuRandomProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cpuRandomProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$cpuRandomHash();
+
+  @$internal
+  @override
+  $ProviderElement<Random> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Random create(Ref ref) {
+    return cpuRandom(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Random value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Random>(value),
+    );
+  }
+}
+
+String _$cpuRandomHash() => r'9b4bc1a1c8d89f454976256dca5f95d293636be1';
+
+@ProviderFor(playCpuMove)
+final playCpuMoveProvider = PlayCpuMoveProvider._();
+
+final class PlayCpuMoveProvider
+    extends $FunctionalProvider<PlayCpuMoveFun, PlayCpuMoveFun, PlayCpuMoveFun>
+    with $Provider<PlayCpuMoveFun> {
+  PlayCpuMoveProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'playCpuMoveProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$playCpuMoveHash();
+
+  @$internal
+  @override
+  $ProviderElement<PlayCpuMoveFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  PlayCpuMoveFun create(Ref ref) {
+    return playCpuMove(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(PlayCpuMoveFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<PlayCpuMoveFun>(value),
+    );
+  }
+}
+
+String _$playCpuMoveHash() => r'44480ea1186bdeb63f1897232283c84473613fa4';
 
 @ProviderFor(playMove)
 final playMoveProvider = PlayMoveProvider._();
