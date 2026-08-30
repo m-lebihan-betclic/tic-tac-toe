@@ -15,6 +15,32 @@ import 'package:session_domain/session_domain.dart';
 /// board paints itself in the grid colour and lets it show through, so the lines are the
 /// background rather than nine borders doubling up where cells meet. That is what makes the same
 /// layout correct at 320 and at 390.
+/// Which of the board's own corners a cell sits in, if any.
+///
+/// The four corner cells are clipped by the board's rounded edge, so anything one of them draws
+/// on its own outline — the invalid ring — has to be rounded the same way or it loses its corner
+/// to the clip. The board hands this down because the board is what owns the clip; a cell
+/// re-deriving it would be a second copy of the radius.
+BorderRadius _cornerFor({required int column, required int row}) {
+  final bool bottom = row == _side - 1;
+  final bool left = column == 0;
+  final bool right = column == _side - 1;
+  final bool top = row == 0;
+
+  return BorderRadius.only(
+    bottomLeft: bottom && left ? _innerCorner : Radius.zero,
+    bottomRight: bottom && right ? _innerCorner : Radius.zero,
+    topLeft: top && left ? _innerCorner : Radius.zero,
+    topRight: top && right ? _innerCorner : Radius.zero,
+  );
+}
+
+/// The radius the cells actually meet: the board's own, less the hairline of padding that draws
+/// its outer edge.
+const Radius _innerCorner = Radius.circular(AppRadius.board - AppSizing.hairline);
+
+const int _side = 3;
+
 class GameBoard extends ConsumerWidget {
   /// Dimmed while the CPU is thinking; fully lit again the moment the game ends, because the
   /// result is the reward and nothing should dim it.
@@ -54,19 +80,24 @@ class GameBoard extends ConsumerWidget {
           child: Padding(
             padding: const EdgeInsets.all(AppSizing.hairline),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppRadius.board - AppSizing.hairline),
+              borderRadius: const BorderRadius.all(_innerCorner),
               child: Stack(
                 children: <Widget>[
                   Column(
                     spacing: AppSizing.hairline,
                     children: <Widget>[
-                      for (int row = 0; row < 3; row++)
+                      for (int row = 0; row < _side; row++)
                         Expanded(
                           child: Row(
                             spacing: AppSizing.hairline,
                             children: <Widget>[
-                              for (int column = 0; column < 3; column++)
-                                Expanded(child: SlotButton(slot: row * 3 + column)),
+                              for (int column = 0; column < _side; column++)
+                                Expanded(
+                                  child: SlotButton(
+                                    corner: _cornerFor(row: row, column: column),
+                                    slot: row * _side + column,
+                                  ),
+                                ),
                             ],
                           ),
                         ),

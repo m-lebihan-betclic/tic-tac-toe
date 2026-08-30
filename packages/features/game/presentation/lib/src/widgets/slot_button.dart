@@ -16,12 +16,15 @@ import 'package:game_presentation/src/widgets/marks.dart';
 /// board above it must not watch the whole state either, or that saving is thrown away.
 class SlotButton extends ConsumerWidget {
   static const double _invalidRingWidth = 2;
-  static const double _invalidRingInset = AppSpacing.spacing100;
   static const double _pressedDotDiameter = 14;
+
+  /// The board's own corner, when this cell sits in one. Rounded there and square everywhere
+  /// else, which is the shape the cell already is once the board's clip has had it.
+  final BorderRadius corner;
 
   final int slot;
 
-  const SlotButton({required this.slot, super.key});
+  const SlotButton({required this.corner, required this.slot, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,6 +38,7 @@ class SlotButton extends ConsumerWidget {
     return _ShakeOnInvalid(
       isInvalid: isInvalid,
       child: _Cell(
+        corner: corner,
         isInteractive: isInteractive,
         mark: mark,
         onPressed: isInteractive ? () => ref.read(gameUiStateProvider.notifier).play(slot) : null,
@@ -46,6 +50,7 @@ class SlotButton extends ConsumerWidget {
 }
 
 class _Cell extends StatefulWidget {
+  final BorderRadius corner;
   final bool isInteractive;
   final Mark? mark;
   final VoidCallback? onPressed;
@@ -53,6 +58,7 @@ class _Cell extends StatefulWidget {
   final GameTheme theme;
 
   const _Cell({
+    required this.corner,
     required this.isInteractive,
     required this.mark,
     required this.onPressed,
@@ -78,48 +84,43 @@ class _CellState extends State<_Cell> {
       onTapCancel: widget.onPressed == null ? null : () => _setPressed(false),
       onTapDown: widget.onPressed == null ? null : (_) => _setPressed(true),
       onTapUp: widget.onPressed == null ? null : (_) => _setPressed(false),
+      // No `alignment` on the container: that would wrap the child in an `Align`, which loosens
+      // the constraints, and the stack below would then size itself to the mark instead of to
+      // the cell. Centring is the stack's job, so the ring can fill the cell rather than the
+      // mark's own box — which is what it was quietly doing before.
       child: AnimatedContainer(
-        alignment: Alignment.center,
         decoration: BoxDecoration(color: showPressed ? theme.cellPressedColor : theme.cellColor),
         duration: AppMotion.press,
-        // The ring is inset rather than drawn on the cell's edge. A corner cell sits against the
-        // board's rounded clip, and an edge-hugging ring loses its corner to it.
         child: Stack(
-          alignment: Alignment.center,
+          fit: StackFit.expand,
           children: <Widget>[
-            switch (widget.mark) {
-              Mark.o => CpuMark(color: theme.markCpuColor),
-              Mark.x => PlayerMark(color: theme.markPlayerColor),
-              null =>
-                showPressed
-                    ? SizedBox.square(
-                        dimension: SlotButton._pressedDotDiameter,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: theme.pressedDotColor,
-                            shape: BoxShape.circle,
+            Center(
+              child: switch (widget.mark) {
+                Mark.o => CpuMark(color: theme.markCpuColor),
+                Mark.x => PlayerMark(color: theme.markPlayerColor),
+                null =>
+                  showPressed
+                      ? SizedBox.square(
+                          dimension: SlotButton._pressedDotDiameter,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: theme.pressedDotColor,
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-            },
-            // Genuinely inset, with a margin — `strokeAlignInside` only moves the stroke within
-            // the same box, so the ring still ended at the cell's corner and a corner cell lost
-            // it to the board's rounded clip. A clip of radius r removes any point closer than
-            // r(1 − 1/√2) ≈ 3.8px to the corner, so the margin has to clear that.
-            if (widget.ringColor != null)
-              Positioned.fill(
-                child: Padding(
-                  padding: const EdgeInsets.all(SlotButton._invalidRingInset),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: widget.ringColor!,
-                        width: SlotButton._invalidRingWidth,
-                      ),
-                      borderRadius: BorderRadius.circular(AppRadius.badge),
-                    ),
-                  ),
+                        )
+                      : const SizedBox.shrink(),
+              },
+            ),
+            // The cell's own outline, not a badge floating inside it: the square that was
+            // refused is the square that lights up. It follows [corner], so a corner cell's ring
+            // curves with the board instead of running square into the clip and losing its
+            // corner to it.
+            if (widget.ringColor case final Color color)
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border.all(color: color, width: SlotButton._invalidRingWidth),
+                  borderRadius: widget.corner,
                 ),
               ),
           ],
