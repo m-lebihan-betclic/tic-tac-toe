@@ -6,11 +6,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'support/harness.dart';
 
 void main() {
-  for (final MapEntry<String, AppPalette Function()> palette in palettes.entries) {
-    testWidgets('button states in ${palette.key}', (tester) async {
+  for (final GoldenTheme theme in goldenThemes()) {
+    testWidgets('button states in ${theme.name}', (tester) async {
       await pumpComponent(
         tester,
-        palette: palette.value(),
+        theme: theme,
         // Four 52px buttons and three gaps, inside the gutter: 320 is the shortest canvas that
         // holds them without the column overflowing.
         size: const Size(320, 320),
@@ -28,14 +28,14 @@ void main() {
 
       await expectLater(
         find.byKey(const Key('golden')),
-        matchesGoldenFile('goldens/app_button_${palette.key}.png'),
+        matchesGoldenFile('goldens/app_button_${theme.name}.png'),
       );
     });
 
-    testWidgets('button pressed in ${palette.key}', (tester) async {
+    testWidgets('button pressed in ${theme.name}', (tester) async {
       await pumpComponent(
         tester,
-        palette: palette.value(),
+        theme: theme,
         size: const Size(320, 180),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -63,7 +63,7 @@ void main() {
 
       await expectLater(
         find.byKey(const Key('golden')),
-        matchesGoldenFile('goldens/app_button_pressed_${palette.key}.png'),
+        matchesGoldenFile('goldens/app_button_pressed_${theme.name}.png'),
       );
     });
   }

@@ -11,11 +11,11 @@ import 'support/harness.dart';
 /// together: a radio's 6px ring is right or wrong relative to the row it sits in, and a card whose
 /// dividers land at the wrong height is invisible in isolation.
 void main() {
-  for (final MapEntry<String, AppPalette Function()> palette in palettes.entries) {
-    testWidgets('card, rows, radio and segments in ${palette.key}', (tester) async {
+  for (final GoldenTheme theme in goldenThemes()) {
+    testWidgets('card, rows, radio and segments in ${theme.name}', (tester) async {
       await pumpComponent(
         tester,
-        palette: palette.value(),
+        theme: theme,
         // Taller than the default surface: two cards and a control do not fit a component-sized
         // box, and the alternative is three captures that never show a divider between rows.
         size: const Size(320, 320),
@@ -50,7 +50,7 @@ void main() {
 
       await expectLater(
         find.byKey(const Key('golden')),
-        matchesGoldenFile('goldens/settings_components_${palette.key}.png'),
+        matchesGoldenFile('goldens/settings_components_${theme.name}.png'),
       );
     });
   }
