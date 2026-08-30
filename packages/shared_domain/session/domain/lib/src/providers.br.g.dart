@@ -50,6 +50,47 @@ final class StoredDifficultyProvider
 
 String _$storedDifficultyHash() => r'b02fc95384dafeb715397f0db4c4af21241172af';
 
+@ProviderFor(storedLocale)
+final storedLocaleProvider = StoredLocaleProvider._();
+
+final class StoredLocaleProvider
+    extends $FunctionalProvider<AppLocale?, AppLocale?, AppLocale?>
+    with $Provider<AppLocale?> {
+  StoredLocaleProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'storedLocaleProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$storedLocaleHash();
+
+  @$internal
+  @override
+  $ProviderElement<AppLocale?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  AppLocale? create(Ref ref) {
+    return storedLocale(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AppLocale? value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AppLocale?>(value),
+    );
+  }
+}
+
+String _$storedLocaleHash() => r'35250c72bc8814d8e0d0012598cc990a6697a9a9';
+
 @ProviderFor(storedPlayer)
 final storedPlayerProvider = StoredPlayerProvider._();
 
@@ -178,6 +219,47 @@ final class SaveDifficultyProvider
 }
 
 String _$saveDifficultyHash() => r'692c5a9646b371872ddac1c487b276a1a98dd063';
+
+@ProviderFor(saveLocale)
+final saveLocaleProvider = SaveLocaleProvider._();
+
+final class SaveLocaleProvider
+    extends $FunctionalProvider<SaveLocaleFun, SaveLocaleFun, SaveLocaleFun>
+    with $Provider<SaveLocaleFun> {
+  SaveLocaleProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'saveLocaleProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$saveLocaleHash();
+
+  @$internal
+  @override
+  $ProviderElement<SaveLocaleFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SaveLocaleFun create(Ref ref) {
+    return saveLocale(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SaveLocaleFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SaveLocaleFun>(value),
+    );
+  }
+}
+
+String _$saveLocaleHash() => r'82ac4b16f44c45245892ca11ca038e24142faef4';
 
 @ProviderFor(savePlayer)
 final savePlayerProvider = SavePlayerProvider._();

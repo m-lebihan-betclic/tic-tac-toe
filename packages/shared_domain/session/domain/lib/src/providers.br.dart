@@ -1,10 +1,13 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:session_domain/src/behaviors/read_difficulty.dart';
+import 'package:session_domain/src/behaviors/read_locale.dart';
 import 'package:session_domain/src/behaviors/read_player.dart';
 import 'package:session_domain/src/behaviors/read_theme.dart';
 import 'package:session_domain/src/behaviors/save_difficulty.dart';
+import 'package:session_domain/src/behaviors/save_locale.dart';
 import 'package:session_domain/src/behaviors/save_player.dart';
 import 'package:session_domain/src/behaviors/save_theme.dart';
+import 'package:session_domain/src/entities/app_locale.dart';
 import 'package:session_domain/src/entities/app_theme.dart';
 import 'package:session_domain/src/entities/difficulty.dart';
 import 'package:session_domain/src/entities/player.dart';
@@ -44,11 +47,15 @@ List<Override> bindProviders({
 // or not at all, and providers_di is never exported.
 
 typedef SaveDifficultyFun = void Function(Difficulty difficulty);
+typedef SaveLocaleFun = void Function(AppLocale locale);
 typedef SavePlayerFun = void Function(Player player);
 typedef SaveThemeFun = void Function(AppTheme theme);
 
 @riverpod
 Difficulty? storedDifficulty(Ref ref) => ReadDifficulty(preferences: ref.watch(preferencesRepositoryProvider))();
+
+@riverpod
+AppLocale? storedLocale(Ref ref) => ReadLocale(preferences: ref.watch(preferencesRepositoryProvider))();
 
 @riverpod
 Player? storedPlayer(Ref ref) => ReadPlayer(player: ref.watch(playerRepositoryProvider))();
@@ -58,6 +65,9 @@ AppTheme? storedTheme(Ref ref) => ReadTheme(preferences: ref.watch(preferencesRe
 
 @riverpod
 SaveDifficultyFun saveDifficulty(Ref ref) => SaveDifficulty(preferences: ref.watch(preferencesRepositoryProvider)).call;
+
+@riverpod
+SaveLocaleFun saveLocale(Ref ref) => SaveLocale(preferences: ref.watch(preferencesRepositoryProvider)).call;
 
 @riverpod
 SavePlayerFun savePlayer(Ref ref) => SavePlayer(player: ref.watch(playerRepositoryProvider)).call;
