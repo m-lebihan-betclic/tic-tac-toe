@@ -1,12 +1,11 @@
 import 'dart:async';
 
+import 'package:design_components/design_components.dart';
 import 'package:design_tokens/design_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n/l10n.dart';
 import 'package:splash_presentation/src/providers_di.br.dart';
-import 'package:splash_presentation/src/widgets/blinking_dots.dart';
-import 'package:splash_presentation/src/widgets/splash_mark.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -54,7 +53,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     mainAxisSize: MainAxisSize.min,
                     spacing: AppSpacing.spacing750,
                     children: <Widget>[
-                      SplashMark(
+                      NineSquareMark.splash(
                         cpuColor: theme.markCpuColor,
                         outlineColor: theme.markOutlineColor,
                         playerColor: theme.markPlayerColor,

@@ -11,7 +11,7 @@ import 'package:shouldly/shouldly.dart';
 
 import '../../../support/layout.dart';
 
-/// Names the nth free square, so a scenario can state the CPU's choice outright instead of
+/// Names the nth free slot, so a scenario can state the CPU's choice outright instead of
 /// depending on the SDK's generator producing the same numbers it produces today.
 class _FixedRandom implements Random {
   final int _index;
@@ -53,13 +53,13 @@ Set<GameOutcome> _everyOutcome(Game game) {
 }
 
 void main() {
-  given('the CPU one square from a line of its own', (_) => boardOf('OO./XX./...'))
+  given('the CPU one slot from a line of its own', (_) => boardOf('OO./XX./...'))
       .when('easy chooses', (sut, _) => const EasyCpu(random: _FixedRandom(0)).chooseSlot(sut))
       .then('it takes the win', (result, _) => result.should.be(2));
 
-  given('the player one square from a line, and nothing for the CPU to win', (_) => boardOf('XX./O../...'))
+  given('the player one slot from a line, and nothing for the CPU to win', (_) => boardOf('XX./O../...'))
       .when(
-        'easy chooses, its generator naming the second free square',
+        'easy chooses, its generator naming the second free slot',
         (sut, _) => const EasyCpu(random: _FixedRandom(1)).chooseSlot(sut),
       )
       .then(

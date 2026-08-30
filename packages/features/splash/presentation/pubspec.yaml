@@ -10,13 +10,13 @@ resolution: workspace
 
 dependencies:
   auto_route: ^11.1.0
+  design_components:
   design_providers:
   design_tokens:
   exceptions:
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.2.1
-  flutter_svg: ^2.3.0
   l10n:
   riverpod_annotation: ^4.0.2
   session_domain:

@@ -5,8 +5,7 @@ import 'package:flutter/widgets.dart';
 
 /// Three dots pulsing on [AppMotion.dotBlink], each offset by [AppMotion.dotStagger].
 ///
-/// Feature-local for now. It becomes `BlinkingDots` in `design_components` when the game
-/// screen's thinking state needs the same three dots.
+/// Its second caller is the game screen's thinking state, which is what earned it a place here.
 class BlinkingDots extends StatefulWidget {
   final Color color;
 

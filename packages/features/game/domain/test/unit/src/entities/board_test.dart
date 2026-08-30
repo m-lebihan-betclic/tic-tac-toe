@@ -31,9 +31,9 @@ void main() {
       .then('nothing is won yet', (result, _) => result.should.beEmpty());
 
   given(
-    'a position where one square completes both the top row and the falling diagonal',
+    'a position where one slot completes both the top row and the falling diagonal',
     (_) => boardOf('.XX/OXO/OOX'),
-  ).when('the player takes that square', (sut, _) => sut.place(Mark.x, 0).winningLinesFor(Mark.x)).then(
+  ).when('the player takes that slot', (sut, _) => sut.place(Mark.x, 0).winningLinesFor(Mark.x)).then(
     'both lines are reported, not one of them',
     (result, _) {
       result.should.haveCount(2);

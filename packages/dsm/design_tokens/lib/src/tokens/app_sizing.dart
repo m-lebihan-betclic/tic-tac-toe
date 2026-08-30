@@ -24,6 +24,7 @@ class AppRadius {
 
   static const double badge = 6;
   static const double board = 14;
+  static const double button = 12;
   static const double card = 12;
   static const double chip = 10;
   static const double full = 999;
