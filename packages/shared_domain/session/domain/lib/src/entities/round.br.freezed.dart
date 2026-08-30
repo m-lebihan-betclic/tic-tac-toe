@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Round {
 
- Difficulty get difficulty; int get moveCount; GameOutcome get outcome; WinningLine? get winningLine;
+ Difficulty get difficulty; int get moveCount; GameOutcome get outcome; Set<WinningLine> get winningLines;
 /// Create a copy of Round
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $RoundCopyWith<Round> get copyWith => _$RoundCopyWithImpl<Round>(this as Round, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Round&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.winningLine, winningLine) || other.winningLine == winningLine));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Round&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&const DeepCollectionEquality().equals(other.winningLines, winningLines));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,difficulty,moveCount,outcome,winningLine);
+int get hashCode => Object.hash(runtimeType,difficulty,moveCount,outcome,const DeepCollectionEquality().hash(winningLines));
 
 @override
 String toString() {
-  return 'Round(difficulty: $difficulty, moveCount: $moveCount, outcome: $outcome, winningLine: $winningLine)';
+  return 'Round(difficulty: $difficulty, moveCount: $moveCount, outcome: $outcome, winningLines: $winningLines)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $RoundCopyWith<$Res>  {
   factory $RoundCopyWith(Round value, $Res Function(Round) _then) = _$RoundCopyWithImpl;
 @useResult
 $Res call({
- Difficulty difficulty, int moveCount, GameOutcome outcome, WinningLine? winningLine
+ Difficulty difficulty, int moveCount, GameOutcome outcome, Set<WinningLine> winningLines
 });
 
 
@@ -62,13 +62,13 @@ class _$RoundCopyWithImpl<$Res>
 
 /// Create a copy of Round
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? difficulty = null,Object? moveCount = null,Object? outcome = null,Object? winningLine = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? difficulty = null,Object? moveCount = null,Object? outcome = null,Object? winningLines = null,}) {
   return _then(_self.copyWith(
 difficulty: null == difficulty ? _self.difficulty : difficulty // ignore: cast_nullable_to_non_nullable
 as Difficulty,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
 as int,outcome: null == outcome ? _self.outcome : outcome // ignore: cast_nullable_to_non_nullable
-as GameOutcome,winningLine: freezed == winningLine ? _self.winningLine : winningLine // ignore: cast_nullable_to_non_nullable
-as WinningLine?,
+as GameOutcome,winningLines: null == winningLines ? _self.winningLines : winningLines // ignore: cast_nullable_to_non_nullable
+as Set<WinningLine>,
   ));
 }
 
@@ -153,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Difficulty difficulty,  int moveCount,  GameOutcome outcome,  WinningLine? winningLine)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Difficulty difficulty,  int moveCount,  GameOutcome outcome,  Set<WinningLine> winningLines)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Round() when $default != null:
-return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLine);case _:
+return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLines);case _:
   return orElse();
 
 }
@@ -174,10 +174,10 @@ return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLine
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Difficulty difficulty,  int moveCount,  GameOutcome outcome,  WinningLine? winningLine)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Difficulty difficulty,  int moveCount,  GameOutcome outcome,  Set<WinningLine> winningLines)  $default,) {final _that = this;
 switch (_that) {
 case _Round():
-return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLine);case _:
+return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLines);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +194,10 @@ return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLine
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Difficulty difficulty,  int moveCount,  GameOutcome outcome,  WinningLine? winningLine)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Difficulty difficulty,  int moveCount,  GameOutcome outcome,  Set<WinningLine> winningLines)?  $default,) {final _that = this;
 switch (_that) {
 case _Round() when $default != null:
-return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLine);case _:
+return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLines);case _:
   return null;
 
 }
@@ -209,13 +209,19 @@ return $default(_that.difficulty,_that.moveCount,_that.outcome,_that.winningLine
 
 
 class _Round implements Round {
-  const _Round({required this.difficulty, required this.moveCount, required this.outcome, this.winningLine});
+  const _Round({required this.difficulty, required this.moveCount, required this.outcome, final  Set<WinningLine> winningLines = const <WinningLine>{}}): _winningLines = winningLines;
   
 
 @override final  Difficulty difficulty;
 @override final  int moveCount;
 @override final  GameOutcome outcome;
-@override final  WinningLine? winningLine;
+ final  Set<WinningLine> _winningLines;
+@override@JsonKey() Set<WinningLine> get winningLines {
+  if (_winningLines is EqualUnmodifiableSetView) return _winningLines;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableSetView(_winningLines);
+}
+
 
 /// Create a copy of Round
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +233,16 @@ _$RoundCopyWith<_Round> get copyWith => __$RoundCopyWithImpl<_Round>(this, _$ide
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Round&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&(identical(other.winningLine, winningLine) || other.winningLine == winningLine));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Round&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.moveCount, moveCount) || other.moveCount == moveCount)&&(identical(other.outcome, outcome) || other.outcome == outcome)&&const DeepCollectionEquality().equals(other._winningLines, _winningLines));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,difficulty,moveCount,outcome,winningLine);
+int get hashCode => Object.hash(runtimeType,difficulty,moveCount,outcome,const DeepCollectionEquality().hash(_winningLines));
 
 @override
 String toString() {
-  return 'Round(difficulty: $difficulty, moveCount: $moveCount, outcome: $outcome, winningLine: $winningLine)';
+  return 'Round(difficulty: $difficulty, moveCount: $moveCount, outcome: $outcome, winningLines: $winningLines)';
 }
 
 
@@ -247,7 +253,7 @@ abstract mixin class _$RoundCopyWith<$Res> implements $RoundCopyWith<$Res> {
   factory _$RoundCopyWith(_Round value, $Res Function(_Round) _then) = __$RoundCopyWithImpl;
 @override @useResult
 $Res call({
- Difficulty difficulty, int moveCount, GameOutcome outcome, WinningLine? winningLine
+ Difficulty difficulty, int moveCount, GameOutcome outcome, Set<WinningLine> winningLines
 });
 
 
@@ -264,13 +270,13 @@ class __$RoundCopyWithImpl<$Res>
 
 /// Create a copy of Round
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? difficulty = null,Object? moveCount = null,Object? outcome = null,Object? winningLine = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? difficulty = null,Object? moveCount = null,Object? outcome = null,Object? winningLines = null,}) {
   return _then(_Round(
 difficulty: null == difficulty ? _self.difficulty : difficulty // ignore: cast_nullable_to_non_nullable
 as Difficulty,moveCount: null == moveCount ? _self.moveCount : moveCount // ignore: cast_nullable_to_non_nullable
 as int,outcome: null == outcome ? _self.outcome : outcome // ignore: cast_nullable_to_non_nullable
-as GameOutcome,winningLine: freezed == winningLine ? _self.winningLine : winningLine // ignore: cast_nullable_to_non_nullable
-as WinningLine?,
+as GameOutcome,winningLines: null == winningLines ? _self._winningLines : winningLines // ignore: cast_nullable_to_non_nullable
+as Set<WinningLine>,
   ));
 }
 

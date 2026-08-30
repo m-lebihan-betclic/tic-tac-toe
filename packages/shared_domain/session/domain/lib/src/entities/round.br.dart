@@ -11,13 +11,15 @@ part 'round.br.freezed.dart';
 /// the round has to keep the level it started at — otherwise a player switches to easy one move
 /// from losing and the history says they beat `hard`.
 ///
-/// [winningLine] is null exactly when the game was drawn.
+/// [winningLines] is empty exactly when the game was drawn, and holds two when a single move
+/// completed two lines. A `WinningLine?` here would have looked right for a long time before it
+/// quietly dropped one.
 @freezed
 abstract class Round with _$Round {
   const factory Round({
     required Difficulty difficulty,
     required int moveCount,
     required GameOutcome outcome,
-    WinningLine? winningLine,
+    @Default(<WinningLine>{}) Set<WinningLine> winningLines,
   }) = _Round;
 }
