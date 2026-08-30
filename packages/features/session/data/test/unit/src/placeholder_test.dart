@@ -2,7 +2,7 @@ import 'package:givn/givn.dart';
 import 'package:shouldly/shouldly.dart';
 
 void main() {
-  given('a placeholder test for setup_data', (context) => true)
+  given('a placeholder test for session_data', (context) => true)
       .when('the package is tested', (sut, context) => sut)
       .then('it should pass', (result, context) => result.should.beTrue());
 }

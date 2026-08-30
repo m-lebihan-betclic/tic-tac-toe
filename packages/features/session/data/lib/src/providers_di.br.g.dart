@@ -9,25 +9,25 @@ part of 'providers_di.br.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(dummyDISetupData)
-final dummyDISetupDataProvider = DummyDISetupDataProvider._();
+@ProviderFor(dummyDISessionData)
+final dummyDISessionDataProvider = DummyDISessionDataProvider._();
 
-final class DummyDISetupDataProvider
+final class DummyDISessionDataProvider
     extends $FunctionalProvider<void, void, void>
     with $Provider<void> {
-  DummyDISetupDataProvider._()
+  DummyDISessionDataProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'dummyDISetupDataProvider',
+        name: r'dummyDISessionDataProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$dummyDISetupDataHash();
+  String debugGetCreateSourceHash() => _$dummyDISessionDataHash();
 
   @$internal
   @override
@@ -36,7 +36,7 @@ final class DummyDISetupDataProvider
 
   @override
   void create(Ref ref) {
-    return dummyDISetupData(ref);
+    return dummyDISessionData(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -48,4 +48,5 @@ final class DummyDISetupDataProvider
   }
 }
 
-String _$dummyDISetupDataHash() => r'40a2da00881739521d8000f3ed2cd9ea8055de2f';
+String _$dummyDISessionDataHash() =>
+    r'52b40c1baaac81d2692755bf5517b83f83a210ab';

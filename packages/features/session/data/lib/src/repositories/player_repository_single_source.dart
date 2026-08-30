@@ -1,6 +1,6 @@
+import 'package:session_data/src/data_sources/session_in_memory_data_source.br.dart';
+import 'package:session_data/src/data_sources/session_snapshot.br.dart';
 import 'package:session_domain/session_domain.dart';
-import 'package:setup_data/src/data_sources/session_in_memory_data_source.br.dart';
-import 'package:setup_data/src/data_sources/session_snapshot.br.dart';
 
 /// Answers [PlayerRepository] from the session store.
 ///

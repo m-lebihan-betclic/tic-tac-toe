@@ -20,15 +20,15 @@ dependencies:
   freezed_annotation: ^3.1.0
   l10n:
   riverpod_annotation: ^4.0.2
-  theme_tailor_annotation: ^3.0.1
   session_domain:
+  theme_tailor_annotation: ^3.0.1
 
 dev_dependencies:
   auto_route_generator: ^10.4.0
   build_runner: ^2.15.0
-  freezed: ^3.1.0
   flutter_test:
     sdk: flutter
+  freezed: ^3.1.0
   givn:
   riverpod_generator: ^4.0.3
   shouldly: ^0.5.0+1

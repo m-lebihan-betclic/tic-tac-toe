@@ -7,8 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // not in the everyday barrel.
 import 'package:flutter_riverpod/misc.dart';
 import 'package:game_presentation/game_presentation.dart' as game_presentation;
+import 'package:session_data/session_data.dart' as session_data;
 import 'package:session_domain/session_domain.dart';
-import 'package:setup_data/setup_data.dart' as setup_data;
 import 'package:setup_presentation/setup_presentation.dart' as setup_presentation;
 import 'package:splash_presentation/splash_presentation.dart' as splash_presentation;
 
@@ -24,7 +24,7 @@ List<Override> appProviders() => [
     typography: _platformTypographyProvider,
   ),
   // The data layer first: it feeds the session contracts the features read through.
-  ...setup_data.bindProviders(),
+  ...session_data.bindProviders(),
   ...game_presentation.bindProviders(
     player: _playerProvider,
     routing: (ref) => AppGameRouting(router: ref.watch(appRouterProvider)),

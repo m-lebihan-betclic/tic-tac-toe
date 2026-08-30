@@ -1,8 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:session_data/src/data_sources/session_in_memory_data_source.br.dart';
+import 'package:session_data/src/repositories/player_repository_single_source.dart';
+import 'package:session_data/src/repositories/preferences_repository_single_source.dart';
 import 'package:session_domain/session_domain.dart';
-import 'package:setup_data/src/data_sources/session_in_memory_data_source.br.dart';
-import 'package:setup_data/src/repositories/player_repository_single_source.dart';
-import 'package:setup_data/src/repositories/preferences_repository_single_source.dart';
 
 part 'providers.br.g.dart';
 
