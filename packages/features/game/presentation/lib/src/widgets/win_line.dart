@@ -1,3 +1,4 @@
+import 'package:design_tokens/design_tokens.dart';
 import 'package:flutter/widgets.dart';
 import 'package:session_domain/session_domain.dart';
 
@@ -5,17 +6,50 @@ import 'package:session_domain/session_domain.dart';
 ///
 /// A set, not one line: a single move can complete two, and drawing one of them would show the
 /// player half of what they just did.
-class WinLine extends StatelessWidget {
+///
+/// It draws itself on over [AppMotion.winLine] rather than appearing whole. This is the one
+/// moment in the game worth animating — the line is the answer to the move that was just played,
+/// and a stroke that arrives instantly reads as a decoration rather than as a result. Two lines
+/// completed at once draw together, because they happened together.
+class WinLine extends StatefulWidget {
   final Color color;
   final Set<WinningLine> lines;
 
   const WinLine({required this.color, required this.lines, super.key});
 
   @override
+  State<WinLine> createState() => _WinLineState();
+}
+
+class _WinLineState extends State<WinLine> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    duration: AppMotion.winLine,
+    vsync: this,
+  )..forward();
+
+  late final Animation<double> _progress = CurvedAnimation(
+    curve: AppMotion.winLineCurve,
+    parent: _controller,
+  );
+
+  @override
+  void didUpdateWidget(WinLine oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // A different line means a different round, so it draws again from nothing.
+    if (widget.lines != oldWidget.lines) _controller.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) => RepaintBoundary(
     child: IgnorePointer(
       child: CustomPaint(
-        painter: _WinLinePainter(color: color, lines: lines),
+        painter: _WinLinePainter(color: widget.color, lines: widget.lines, progress: _progress),
         size: Size.infinite,
       ),
     ),
@@ -29,8 +63,9 @@ class _WinLinePainter extends CustomPainter {
 
   final Color color;
   final Set<WinningLine> lines;
+  final Animation<double> progress;
 
-  const _WinLinePainter({required this.color, required this.lines});
+  _WinLinePainter({required this.color, required this.lines, required this.progress}) : super(repaint: progress);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -41,7 +76,9 @@ class _WinLinePainter extends CustomPainter {
 
     for (final WinningLine line in lines) {
       final (Offset from, Offset to) = _endpoints(line, size);
-      canvas.drawLine(from, to, paint);
+      // Grown from its start rather than faded in: the stroke travels the way the eye would
+      // trace it, and at t=1 it is exactly the line it always was.
+      canvas.drawLine(from, Offset.lerp(from, to, progress.value) ?? to, paint);
     }
   }
 
