@@ -26,7 +26,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
   final Color outline;
 
   /// Phosphor bloom applied to `onSurface` text, `null` outside the matrix theme.
-  final Shadow? phosphorBloom;
+  final List<Shadow> phosphorBloom;
 
   final Color primary;
   final Color success;
@@ -58,7 +58,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     onSurface: Color(0xFF16181C),
     onSurfaceMuted: Color(0xFF6B7280),
     outline: Color(0xFFE4E4E0),
-    phosphorBloom: null,
+    phosphorBloom: <Shadow>[],
     primary: _lightAccent,
     success: Color(0xFF17875A),
     surface: Color(0xFFFFFFFF),
@@ -74,7 +74,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     onSurface: Color(0xFFF2F4F7),
     onSurfaceMuted: Color(0xFF9AA1AC),
     outline: Color(0xFF23262C),
-    phosphorBloom: null,
+    phosphorBloom: <Shadow>[],
     primary: _darkAccent,
     success: Color(0xFF4FD08A),
     surface: Color(0xFF14161A),
@@ -90,7 +90,15 @@ class AppPalette extends ThemeExtension<AppPalette> {
     onSurface: Color(0xFFC7FFD6),
     onSurfaceMuted: Color(0xFF3F9B58),
     outline: Color(0xFF10361D),
-    phosphorBloom: Shadow(color: Color(0x806BFF8E), blurRadius: 9),
+    // Three layers, not one. A phosphor dot does not fall off linearly: there is a hot core
+    // right at the stroke, a halo around it, and a wide wash that lifts the ground for some
+    // distance. One mid-blur shadow reads as a soft drop shadow, which is what this was.
+    phosphorBloom: <Shadow>[
+      Shadow(color: Color(0xE66BFF8E), blurRadius: 3),
+      Shadow(color: Color(0xB36BFF8E), blurRadius: 10),
+      Shadow(color: Color(0x805CFF84), blurRadius: 24),
+      Shadow(color: Color(0x405CFF84), blurRadius: 46),
+    ],
     primary: _matrixAccent,
     success: _matrixAccent,
     surface: Color(0xFF04120A),
@@ -114,10 +122,12 @@ class AppPalette extends ThemeExtension<AppPalette> {
   /// It is applied to the type that carries a screen — a title, the status sentence, the
   /// wordmark — and not to every label: a 9px blur behind a 12px caption reads as blur rather
   /// than as glow.
-  TextStyle onSurfaceText(TextStyle style) => switch (phosphorBloom) {
-    final Shadow bloom => style.copyWith(color: onSurface, shadows: <Shadow>[bloom]),
-    null => style.copyWith(color: onSurface),
-  };
+  TextStyle onSurfaceText(TextStyle style) => style.copyWith(color: onSurface, shadows: phosphorBloom);
+
+  /// The glow for text already coloured [color]: the bloom when it is [onSurface], nothing
+  /// otherwise. For the places where the colour is decided at the call site — a stat value that
+  /// is muted at zero and accented on a win — and only the plain case should light up.
+  List<Shadow> glowFor(Color color) => color == onSurface ? phosphorBloom : const <Shadow>[];
 
   /// The pressed tone of a **filled** surface: the fill washed with 12% of its own foreground.
   /// Derived rather than tokenised, so it stays correct in all three themes and adding a new
@@ -133,7 +143,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
     Color? onSurface,
     Color? onSurfaceMuted,
     Color? outline,
-    Shadow? phosphorBloom,
+    List<Shadow>? phosphorBloom,
     Color? primary,
     Color? success,
     Color? surface,
@@ -170,7 +180,7 @@ class AppPalette extends ThemeExtension<AppPalette> {
       onSurface: Color.lerp(onSurface, other.onSurface, t)!,
       onSurfaceMuted: Color.lerp(onSurfaceMuted, other.onSurfaceMuted, t)!,
       outline: Color.lerp(outline, other.outline, t)!,
-      phosphorBloom: Shadow.lerp(phosphorBloom, other.phosphorBloom, t),
+      phosphorBloom: Shadow.lerpList(phosphorBloom, other.phosphorBloom, t) ?? const <Shadow>[],
       primary: Color.lerp(primary, other.primary, t)!,
       success: Color.lerp(success, other.success, t)!,
       surface: Color.lerp(surface, other.surface, t)!,

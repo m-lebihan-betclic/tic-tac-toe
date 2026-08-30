@@ -18,7 +18,7 @@ SetupTheme defaultSetupTheme(Ref ref) {
     fieldBorderColor: palette.outline,
     fieldFillColor: palette.background,
     fieldFocusedBorderColor: palette.primary,
-    fieldStyle: typography.body.copyWith(color: palette.onSurface, fontSize: _fieldFontSize),
+    fieldStyle: palette.onSurfaceText(typography.body).copyWith(fontSize: _fieldFontSize),
     handleColor: palette.outline,
     labelStyle: typography.caption.copyWith(color: palette.onSurfaceMuted),
     sheetColor: palette.surface,

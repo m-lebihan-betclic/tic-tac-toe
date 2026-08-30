@@ -50,10 +50,9 @@ class AppCardRow extends StatelessWidget {
                 child: Text(
                   label,
                   overflow: TextOverflow.ellipsis,
-                  style: context.typography.body.copyWith(
-                    color: palette.onSurface,
-                    fontWeight: emphasized ? FontWeight.w500 : FontWeight.w400,
-                  ),
+                  style: palette
+                      .onSurfaceText(context.typography.body)
+                      .copyWith(fontWeight: emphasized ? FontWeight.w500 : FontWeight.w400),
                 ),
               ),
               if (trailing case final Widget trailing) trailing,

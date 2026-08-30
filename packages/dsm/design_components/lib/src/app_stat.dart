@@ -27,7 +27,10 @@ class AppStat extends StatelessWidget {
       spacing: AppSpacing.spacing150,
       children: <Widget>[
         Text(label, style: context.typography.caption.copyWith(color: palette.onSurfaceMuted)),
-        Text(value, style: context.typography.statValue.copyWith(color: valueColor)),
+        Text(
+          value,
+          style: context.typography.statValue.copyWith(color: valueColor, shadows: palette.glowFor(valueColor)),
+        ),
       ],
     );
   }

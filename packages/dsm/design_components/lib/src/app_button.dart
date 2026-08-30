@@ -60,7 +60,10 @@ class AppButton extends StatelessWidget {
           height: AppSizing.buttonHeight,
           onPressed: onPressed,
           pressedFill: pressedFill,
-          child: Text(label, style: context.typography.bold.copyWith(color: foreground)),
+          child: Text(
+            label,
+            style: context.typography.bold.copyWith(color: foreground, shadows: palette.glowFor(foreground)),
+          ),
         ),
       ),
     );
