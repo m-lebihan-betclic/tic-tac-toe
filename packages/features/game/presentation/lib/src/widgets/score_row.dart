@@ -43,14 +43,29 @@ class ScoreRow extends ConsumerWidget {
           }.toUpperCase(),
           style: theme.labelStyle,
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: AppSpacing.spacing400,
-          children: <Widget>[
-            AppStat(accent: accentFor(GameOutcome.won), label: l10n.scoreYou, value: '${scores.won}'),
-            AppStat(accent: accentFor(GameOutcome.lost), label: l10n.scoreCpu, value: '${scores.lost}'),
-            AppStat(accent: accentFor(GameOutcome.drawn), label: l10n.scoreDraw, value: '${scores.drawn}'),
-          ],
+        // Scaled down rather than allowed to overflow. This row is six text runs with no give in
+        // it, so a narrow viewport, a long translation or a large Dynamic Type setting all push
+        // it past the gutter — 390 is the width the design is drawn at, not the only one it has
+        // to survive. At the reference width nothing scales; below it the cluster shrinks as a
+        // whole, which keeps the three tallies reading as one row instead of dropping one.
+        Flexible(
+          child: FittedBox(
+            alignment: Alignment.centerRight,
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: AppSpacing.spacing400,
+              children: <Widget>[
+                AppStat(accent: accentFor(GameOutcome.won), label: l10n.scoreYou, value: '${scores.won}'),
+                AppStat(accent: accentFor(GameOutcome.lost), label: l10n.scoreCpu, value: '${scores.lost}'),
+                AppStat(
+                  accent: accentFor(GameOutcome.drawn),
+                  label: l10n.scoreDraw,
+                  value: '${scores.drawn}',
+                ),
+              ],
+            ),
+          ),
         ),
       ],
     );
