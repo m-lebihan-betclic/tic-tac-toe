@@ -100,6 +100,12 @@ enum.
 - **Never a raw colour** (`0xFF…`, `Colors.red`) or a hardcoded dimension in a feature: read the
   **feature theme** (`{feature}ThemeProvider`), which is built from the design-system tokens in
   `providers_internal.br.dart`. A feature never imports `design_tokens`' palette directly.
+- **A theme's text treatment belongs to the palette, not to each feature theme.** Matrix blooms
+  its `onSurface` text; the other two do not. That is a property of the theme, so it lives on
+  `AppPalette` — `onSurfaceText(style)` for text that is always `onSurface`, `glowFor(color)`
+  where the colour is decided at the call site and only the plain case should light up. A feature
+  that had to remember the bloom itself would look subtly unfinished in exactly one theme, which
+  is the hardest kind of gap to notice.
 - **A screen is a `Scaffold`, its `backgroundColor` read from the feature theme.** There is
   deliberately no `ThemeData.scaffoldBackgroundColor` to fall back on: it would bypass the seam
   composition overrides. The `Scaffold` is also what puts a `Material` in the tree — without one
@@ -210,8 +216,12 @@ change fails all three themes.
 - **Wrap the subject in a keyed `RepaintBoundary` and match `find.byKey`.** Without it the capture
   is the whole 800×600 surface instead of the component, and `find.byType(RepaintBoundary)` throws
   "matched too many widgets" — `MaterialApp` and `Scaffold` each add their own.
-- Install `AppPalette` + `AppTypography` in `ThemeData.extensions` and loop
-  `light() / dark() / matrix()` so one file covers three themes.
+- **Install `AppPalette` + `AppTypography` in `ThemeData.extensions`, and pair them the way
+  composition pairs them.** Loop `light() / dark() / matrix()` so one file covers three themes —
+  but matrix ships with `AppTypography.system(monospace: true)`, so a harness that runs every
+  palette against the default scale pins a rendering the app never produces and goes on passing
+  while real matrix text reflows. Carry the two together in one record rather than letting a
+  caller pick a palette and forget the scale.
 - **The harness puts a `Material` above the subject.** A component is never rendered without one
   in the app — every screen is a `Scaffold` — so a harness without one captures a configuration
   that never ships: `Text` merges onto `MaterialApp`'s fallback style and the baseline bakes in a
@@ -220,7 +230,17 @@ change fails all three themes.
 - `await tester.pumpAndSettle()` before every capture, or an in-flight animation flakes the test —
   **except** where something animates forever, like the blinking dots. `pumpAndSettle` waits for a
   tree that goes quiet and that tree never does, so those pump a single frame instead.
-- Text renders as boxes. Goldens verify layout, colour and assets — never glyphs.
+- **A screen golden wraps the screen in whatever `MaterialApp.builder` wraps it in, and the
+  capture boundary goes *above* that.** App-level chrome — the matrix CRT overlay — is injected
+  by `builder`, which sits above `home`: a boundary inside `home` frames the screen and leaves
+  the chrome outside the picture, so the golden passes while pinning something the app never
+  shows. Component goldens deliberately carry no chrome; a component golden pins the component.
+- **Seed anything random before capturing it.** The easy CPU plays a random free slot, so a
+  baseline that lets it move is a different picture every run. `cpuRandomProvider` exists for
+  this; a golden that flakes gets deleted, and a golden that gets deleted stops catching things.
+- Text renders as boxes. Goldens verify layout, colour and assets — never glyphs. A glow or a
+  shadow is verified as shape and colour around a filled box, not around a letterform, so the
+  running app is still the check for whether it looks right.
 - Baselines are macOS-local (they drift on Linux); commit them, and say so in the repo README.
 
 ## Commands
