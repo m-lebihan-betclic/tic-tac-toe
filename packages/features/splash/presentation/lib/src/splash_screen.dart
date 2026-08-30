@@ -42,34 +42,51 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     // its yellow double underline, because a TextStyle only overrides the fields it sets.
     return Scaffold(
       backgroundColor: theme.backgroundColor,
-      body: SafeArea(
-        child: Column(
+      // The mark is centred on the *screen*, not on the lockup it heads.
+      //
+      // That is the whole trick behind the launch handover. The native launch screen can centre
+      // an image in its window exactly and cheaply, and nothing else. Centring the mark and the
+      // wordmark as a group — which is what this did — put the mark at an offset that depends on
+      // the safe-area insets and on the rendered height of two strings, which no storyboard
+      // constraint can follow. So the Flutter side moved to the position the native side can
+      // hit, rather than the other way round, and the mark now survives the handover without
+      // moving a pixel.
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) => Stack(
           children: <Widget>[
-            Expanded(
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: AppSpacing.spacing750,
-                    children: <Widget>[
-                      NineSquareMark.splash(
-                        cpuColor: theme.markCpuColor,
-                        outlineColor: theme.markOutlineColor,
-                        playerColor: theme.markPlayerColor,
-                      ),
-                      _Wordmark(
-                        taglineStyle: theme.taglineStyle,
-                        wordmarkStyle: theme.wordmarkStyle,
-                      ),
-                    ],
-                  ),
+            Center(
+              child: NineSquareMark.splash(
+                cpuColor: theme.markCpuColor,
+                outlineColor: theme.markOutlineColor,
+                playerColor: theme.markPlayerColor,
+              ),
+            ),
+            // The lockup hangs from the mark's bottom edge rather than sharing a column with it,
+            // so its own height — which moves with the type scale and the reader's text size —
+            // can never shift the mark.
+            Positioned(
+              left: 0,
+              right: 0,
+              top: constraints.maxHeight / 2 + AppSizing.markSplash / 2 + AppSpacing.spacing750,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.gutter),
+                child: _Wordmark(
+                  taglineStyle: theme.taglineStyle,
+                  wordmarkStyle: theme.wordmarkStyle,
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: _dotsBottomInset),
-              child: BlinkingDots(color: theme.dotColor),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: _dotsBottomInset),
+                  child: Center(child: BlinkingDots(color: theme.dotColor)),
+                ),
+              ),
             ),
           ],
         ),
