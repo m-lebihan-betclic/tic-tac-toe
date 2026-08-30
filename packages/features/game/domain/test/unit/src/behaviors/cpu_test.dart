@@ -35,9 +35,9 @@ class _FixedRandom implements Random {
 /// 945 complete games.
 Set<GameOutcome> _everyOutcome(Game game) {
   const PlayMove play = PlayMove();
-  final PlayCpuMove cpu = PlayCpuMove(
-    easy: const EasyCpu(random: _FixedRandom(0)),
-    hard: const HardCpu(),
+  const PlayCpuMove cpu = PlayCpuMove(
+    easy: EasyCpu(random: _FixedRandom(0)),
+    hard: HardCpu(),
   );
 
   switch (game.status) {
@@ -57,12 +57,15 @@ void main() {
       .when('easy chooses', (sut, _) => const EasyCpu(random: _FixedRandom(0)).chooseSlot(sut))
       .then('it takes the win', (result, _) => result.should.be(2));
 
-  given('the player one square from a line, and nothing for the CPU to win',
-          (_) => boardOf('XX./O../...'))
-      .when('easy chooses, its generator naming the second free square',
-          (sut, _) => const EasyCpu(random: _FixedRandom(1)).chooseSlot(sut))
-      .then('it plays there and leaves the player\'s line open — easy does not block',
-          (result, _) => result.should.be(4));
+  given('the player one square from a line, and nothing for the CPU to win', (_) => boardOf('XX./O../...'))
+      .when(
+        'easy chooses, its generator naming the second free square',
+        (sut, _) => const EasyCpu(random: _FixedRandom(1)).chooseSlot(sut),
+      )
+      .then(
+        "it plays there and leaves the player's line open — easy does not block",
+        (result, _) => result.should.be(4),
+      );
 
   given('a hard game', (_) => Game.initial(difficulty: Difficulty.hard))
       .when('every game the player could possibly play is played out', (sut, _) => _everyOutcome(sut))

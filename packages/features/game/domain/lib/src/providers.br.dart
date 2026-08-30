@@ -33,8 +33,10 @@ typedef StartRoundFun = Game Function({required Difficulty difficulty});
 Random cpuRandom(Ref ref) => Random();
 
 @riverpod
-PlayCpuMoveFun playCpuMove(Ref ref) =>
-    PlayCpuMove(easy: EasyCpu(random: ref.watch(cpuRandomProvider)), hard: const HardCpu()).call;
+PlayCpuMoveFun playCpuMove(Ref ref) => PlayCpuMove(
+  easy: EasyCpu(random: ref.watch(cpuRandomProvider)),
+  hard: const HardCpu(),
+).call;
 
 @riverpod
 PlayMoveFun playMove(Ref ref) => const PlayMove().call;

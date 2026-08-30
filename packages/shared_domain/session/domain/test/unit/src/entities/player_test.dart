@@ -5,8 +5,7 @@ import 'package:shouldly/shouldly.dart';
 void main() {
   given('a nickname longer than the cap', (_) => 'Bartholomew the Third')
       .when('a player is created from it', (sut, _) => Player.create(sut))
-      .then('it is cut to twelve characters',
-          (result, _) => result.getOrNull()!.name.should.be('Bartholomew '));
+      .then('it is cut to twelve characters', (result, _) => result.getOrNull()!.name.should.be('Bartholomew '));
 
   given('a nickname padded with spaces', (_) => '   Morgan   ')
       .when('a player is created from it', (sut, _) => Player.create(sut))

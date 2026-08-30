@@ -30,14 +30,17 @@ void main() {
       .when('the board is asked what has been won', (sut, _) => sut.winningLinesFor(Mark.x))
       .then('nothing is won yet', (result, _) => result.should.beEmpty());
 
-  given('a position where one square completes both the top row and the falling diagonal',
-          (_) => boardOf('.XX/OXO/OOX'))
-      .when('the player takes that square', (sut, _) => sut.place(Mark.x, 0).winningLinesFor(Mark.x))
-      .then('both lines are reported, not one of them', (result, _) {
-        result.should.haveCount(2);
-        result.should.contain(WinningLine.topRow);
-        result.should.contain(WinningLine.diagonalDown);
-      });
+  given(
+    'a position where one square completes both the top row and the falling diagonal',
+    (_) => boardOf('.XX/OXO/OOX'),
+  ).when('the player takes that square', (sut, _) => sut.place(Mark.x, 0).winningLinesFor(Mark.x)).then(
+    'both lines are reported, not one of them',
+    (result, _) {
+      result.should.haveCount(2);
+      result.should.contain(WinningLine.topRow);
+      result.should.contain(WinningLine.diagonalDown);
+    },
+  );
 
   given('a full board with no three in a line', (_) => boardOf('XXO/OOX/XXO'))
       .when('the board is asked whether it is finished', (sut, _) => sut.isFull)
