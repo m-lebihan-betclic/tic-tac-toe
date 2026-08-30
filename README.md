@@ -23,6 +23,57 @@ mise run test
 mise run goldens
 ```
 
+## The shape of it
+
+```
+apps/tic_tac_toe/
+
+packages/
+├── composition/
+│   ├── app_providers/
+│   └── app_router/
+│
+├── features/
+│   ├── game/
+│   │   ├── domain/
+│   │   │   ├── lib/src/entities/
+│   │   │   ├── lib/src/behaviors/
+│   │   │   └── test/unit/src/
+│   │   └── presentation/
+│   │       ├── lib/src/notifiers/
+│   │       ├── lib/src/state/
+│   │       ├── lib/src/theme/
+│   │       ├── lib/src/routing/
+│   │       ├── lib/src/widgets/
+│   │       └── test/
+│   │           ├── unit/src/
+│   │           └── golden/
+│   │
+│   ├── setup/presentation/
+│   ├── settings/presentation/
+│   ├── splash/presentation/
+│   └── session/data/                 no presentation: the store the features share
+│       ├── lib/src/data_sources/
+│       └── lib/src/repositories/
+│
+├── shared_domain/session/domain/     domain-only, always
+│   ├── lib/src/entities/
+│   ├── lib/src/behaviors/
+│   └── lib/src/repositories/
+│
+├── dsm/
+│   ├── design_tokens/
+│   ├── design_components/
+│   │   └── test/golden/
+│   ├── design_providers/
+│   └── l10n/
+│
+└── utilities/
+```
+
+Dependencies point one way only: `presentation → domain ← data`, and nothing but `composition`
+imports two features.
+
 **The golden baselines are macOS-local.** Font rasterisation differs between platforms, so a
 Linux run reports diffs on every one of them; there is no CI pipeline here and these do not
 pretend otherwise. Regenerate with `mise run goldens-update`, and look at every changed PNG
