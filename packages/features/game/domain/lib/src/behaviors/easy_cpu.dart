@@ -10,9 +10,6 @@ import 'package:game_domain/src/entities/mark.dart';
 /// review, and a perfect opponent means nobody ever sees it. An unreachable screen may as well
 /// not be built.
 ///
-/// [Random] arrives through the constructor. A bare `Random()` in here would make both the unit
-/// tests and the goldens non-deterministic, and the hour spent finding out why is not one anybody
-/// gets back.
 class EasyCpu implements CpuStrategy {
   final Random _random;
 

@@ -12,10 +12,6 @@ import 'package:types_result_domain/types_result_domain.dart';
 ///
 /// The level is read from the game rather than from settings, so changing difficulty mid-round
 /// cannot change the opponent halfway through it.
-///
-/// There is no delay here. The 700ms thinking beat is presentation — it is what the player sees
-/// while nothing is happening — and a duration in this package would be a rule that isn't one,
-/// and a test that has to wait.
 class PlayCpuMove {
   final CpuStrategy _easy;
   final CpuStrategy _hard;

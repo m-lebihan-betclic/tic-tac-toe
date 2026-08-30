@@ -5,10 +5,6 @@ import 'package:game_domain/src/entities/mark.dart';
 /// Full minimax. Blocks every threat, takes every win, and cannot be beaten — a played-out game
 /// against it ends drawn or lost, never won.
 ///
-/// Minimax is not a utility. A utility is product-agnostic — a `Result`, a clock, a debouncer.
-/// Board evaluation answers *what is success*, which is the definition of a business rule, so it
-/// lives here behind [CpuStrategy] where nothing outside the package can reach it.
-///
 /// Scores are depth-adjusted so a win now beats the same win three moves later, and a loss later
 /// beats a loss now. Without it the CPU plays a technically-drawn game that looks aimless.
 class HardCpu implements CpuStrategy {
