@@ -39,7 +39,7 @@ class AppTypography extends ThemeExtension<AppTypography> {
 
     return AppTypography(
       body: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, fontFamilyFallback: family),
-      bold: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, fontFamilyFallback: family),
+      bold: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, fontFamilyFallback: family),
       caption: const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w600,
@@ -60,7 +60,7 @@ class AppTypography extends ThemeExtension<AppTypography> {
       ),
       title: TextStyle(
         fontSize: 27,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w800,
         letterSpacing: -0.4,
         fontFamilyFallback: family,
       ),

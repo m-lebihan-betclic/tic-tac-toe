@@ -58,7 +58,7 @@
   },
   "resultLost": "CPU takes it.",
   "resultDraw": "Draw. Nobody blinked.",
-  "statusReset": "Board cleared. Your turn, {name}.",
+  "statusReset": "Your turn, {name}.",
   "@statusReset": {
     "placeholders": {
       "name": {

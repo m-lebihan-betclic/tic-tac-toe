@@ -16,6 +16,7 @@ import 'package:game_presentation/src/widgets/marks.dart';
 /// board above it must not watch the whole state either, or that saving is thrown away.
 class SlotButton extends ConsumerWidget {
   static const double _invalidRingWidth = 2;
+  static const double _invalidRingInset = AppSpacing.spacing100;
   static const double _pressedDotDiameter = 14;
 
   final int slot;
@@ -83,32 +84,46 @@ class _CellState extends State<_Cell> {
         duration: AppMotion.press,
         // The ring is inset rather than drawn on the cell's edge. A corner cell sits against the
         // board's rounded clip, and an edge-hugging ring loses its corner to it.
-        foregroundDecoration: widget.ringColor == null
-            ? null
-            : BoxDecoration(
-                border: Border.all(
-                  color: widget.ringColor!,
-                  strokeAlign: BorderSide.strokeAlignInside,
-                  width: SlotButton._invalidRingWidth,
-                ),
-                borderRadius: BorderRadius.circular(AppRadius.mark),
-              ),
-        child: switch (widget.mark) {
-          Mark.o => CpuMark(color: theme.markCpuColor),
-          Mark.x => PlayerMark(color: theme.markPlayerColor),
-          null =>
-            showPressed
-                ? SizedBox.square(
-                    dimension: SlotButton._pressedDotDiameter,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: theme.pressedDotColor,
-                        shape: BoxShape.circle,
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            switch (widget.mark) {
+              Mark.o => CpuMark(color: theme.markCpuColor),
+              Mark.x => PlayerMark(color: theme.markPlayerColor),
+              null =>
+                showPressed
+                    ? SizedBox.square(
+                        dimension: SlotButton._pressedDotDiameter,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: theme.pressedDotColor,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+            },
+            // Genuinely inset, with a margin — `strokeAlignInside` only moves the stroke within
+            // the same box, so the ring still ended at the cell's corner and a corner cell lost
+            // it to the board's rounded clip. A clip of radius r removes any point closer than
+            // r(1 − 1/√2) ≈ 3.8px to the corner, so the margin has to clear that.
+            if (widget.ringColor != null)
+              Positioned.fill(
+                child: Padding(
+                  padding: const EdgeInsets.all(SlotButton._invalidRingInset),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: widget.ringColor!,
+                        width: SlotButton._invalidRingWidth,
                       ),
+                      borderRadius: BorderRadius.circular(AppRadius.badge),
                     ),
-                  )
-                : const SizedBox.shrink(),
-        },
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

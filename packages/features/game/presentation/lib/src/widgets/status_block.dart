@@ -13,15 +13,15 @@ import 'package:session_domain/session_domain.dart';
 /// Fixed height, so the board never shifts when the wording changes — the three board states
 /// differ in what this says and in nothing else.
 class StatusBlock extends ConsumerWidget {
-  /// Two lines of [GameTheme.sentenceStyle] plus the label row and its gap — as a **minimum**,
-  /// not a fixed size.
+  /// One line of [GameTheme.sentenceStyle] plus the label row and its gap — a **minimum**, not a
+  /// fixed size.
   ///
-  /// The floor is what the spec is really asking for: the three board states differ only in what
-  /// this says, so reserving two lines means the board does not jump as the wording changes
-  /// between them. Making it a ceiling as well is what cropped a descender, and would crop
-  /// French or a larger text scale next. Past the floor the block grows and the board, which is
-  /// Expanded, gives up the height.
-  static const double _minHeight = 116;
+  /// The floor is what stops the board jumping as the wording changes between states, and every
+  /// sentence is one line since the copy pass, so one line is what needs reserving. A
+  /// twelve-character name can still push the longest of them onto a second, and the block grows
+  /// for it: the board is Expanded and gives up the height rather than the sentence being cut
+  /// off, which is what a fixed height did.
+  static const double _minHeight = 64;
   static const double _sentenceGap = 12;
   static const double _labelGap = 8;
 

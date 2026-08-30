@@ -58,7 +58,7 @@
   },
   "resultLost": "Le CPU l'emporte.",
   "resultDraw": "Match nul.",
-  "statusReset": "Plateau effacé. À toi, {name}.",
+  "statusReset": "À toi, {name}.",
   "@statusReset": {
     "placeholders": {
       "name": {
