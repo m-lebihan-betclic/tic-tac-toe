@@ -212,7 +212,14 @@ change fails all three themes.
   "matched too many widgets" — `MaterialApp` and `Scaffold` each add their own.
 - Install `AppPalette` + `AppTypography` in `ThemeData.extensions` and loop
   `light() / dark() / matrix()` so one file covers three themes.
-- `await tester.pumpAndSettle()` before every capture, or an in-flight animation flakes the test.
+- **The harness puts a `Material` above the subject.** A component is never rendered without one
+  in the app — every screen is a `Scaffold` — so a harness without one captures a configuration
+  that never ships: `Text` merges onto `MaterialApp`'s fallback style and the baseline bakes in a
+  monospace family and a yellow double underline. A golden that captures a bug then defends it,
+  and the fix fails the test. One harness owns the wrapper so this has one place to be right.
+- `await tester.pumpAndSettle()` before every capture, or an in-flight animation flakes the test —
+  **except** where something animates forever, like the blinking dots. `pumpAndSettle` waits for a
+  tree that goes quiet and that tree never does, so those pump a single frame instead.
 - Text renders as boxes. Goldens verify layout, colour and assets — never glyphs.
 - Baselines are macOS-local (they drift on Linux); commit them, and say so in the repo README.
 
