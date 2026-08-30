@@ -85,9 +85,18 @@ class AppChip extends StatelessWidget {
                     ),
                   ),
                 ),
-              Text(
-                label,
-                style: context.typography.bold.copyWith(color: foreground, fontSize: _labelSize),
+              // Scaled down rather than clipped or ellipsised. Three chips share a row inside
+              // the gutter, so the slot narrows with the viewport while the word does not — and
+              // on a theme chip the word *is* the content, so `Matr…` would be worse than a
+              // slightly smaller `Matrix`. Nothing scales until it has to.
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    style: context.typography.bold.copyWith(color: foreground, fontSize: _labelSize),
+                  ),
+                ),
               ),
             ],
           ),
