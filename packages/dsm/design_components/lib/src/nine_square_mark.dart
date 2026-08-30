@@ -61,11 +61,10 @@ class _MarkColorMapper extends ColorMapper {
   const _MarkColorMapper({required this.cpu, required this.outline, required this.player});
 
   @override
-  Color substitute(String? id, String elementName, String attributeName, Color color) =>
-      switch (color.toARGB32()) {
-        _svgCpu => cpu,
-        _svgOutline => outline,
-        _svgPlayer => player,
-        _ => color,
-      };
+  Color substitute(String? id, String elementName, String attributeName, Color color) => switch (color.toARGB32()) {
+    _svgCpu => cpu,
+    _svgOutline => outline,
+    _svgPlayer => player,
+    _ => color,
+  };
 }

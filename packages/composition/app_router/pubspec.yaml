@@ -12,6 +12,7 @@ dependencies:
   auto_route: ^11.1.0
   flutter:
     sdk: flutter
+  game_presentation:
   riverpod_annotation: ^4.0.2
   splash_presentation:
 

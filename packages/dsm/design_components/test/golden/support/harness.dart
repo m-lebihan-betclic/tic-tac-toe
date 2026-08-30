@@ -19,6 +19,7 @@ Future<void> pumpComponent(
   required AppPalette palette,
   required Widget child,
   Size size = const Size(320, 260),
+
   /// False for anything that animates forever — `pumpAndSettle` waits for a tree that goes quiet,
   /// and the blinking dots never do.
   bool settle = true,

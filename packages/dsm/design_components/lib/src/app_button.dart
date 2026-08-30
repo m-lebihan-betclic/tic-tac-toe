@@ -19,12 +19,10 @@ class AppButton extends StatelessWidget {
 
   /// `primary` fill, [AppPalette.background] text — the same pairing selected chips and segments
   /// use, so one filled surface never reads differently from another.
-  const AppButton.primary({required this.label, required this.onPressed, super.key})
-    : _variant = _Variant.primary;
+  const AppButton.primary({required this.label, required this.onPressed, super.key}) : _variant = _Variant.primary;
 
   /// Transparent, outlined. Never used for the action a screen is about.
-  const AppButton.secondary({required this.label, required this.onPressed, super.key})
-    : _variant = _Variant.secondary;
+  const AppButton.secondary({required this.label, required this.onPressed, super.key}) : _variant = _Variant.secondary;
 
   bool get _enabled => onPressed != null;
 
