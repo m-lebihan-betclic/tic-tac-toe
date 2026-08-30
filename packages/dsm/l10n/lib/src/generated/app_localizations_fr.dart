@@ -69,8 +69,12 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsChange => 'Modifier';
 
   @override
-  String settingsFooter(String version) {
-    return 'Version $version · Changer de thème ou de langue n\'interrompt jamais une partie en cours.';
+  String get settingsFooter =>
+      'Rien ici n\'interrompt une partie en cours. Le thème et la langue s\'appliquent aussitôt ; la difficulté s\'applique à la manche suivante.';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Version $version';
   }
 
   @override

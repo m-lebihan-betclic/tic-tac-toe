@@ -23,8 +23,9 @@
   "languageFrench": "Français",
   "settingsTitle": "Settings",
   "settingsChange": "Change",
-  "settingsFooter": "Version {version} · Changing theme or language never interrupts a game in progress.",
-  "@settingsFooter": {
+  "settingsFooter": "Nothing here interrupts a game in progress. Theme and language apply at once; the difficulty applies to the next round.",
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
     "placeholders": {
       "version": {
         "type": "String",

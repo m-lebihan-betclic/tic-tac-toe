@@ -215,8 +215,14 @@ abstract class AppLocalizations {
   /// No description provided for @settingsFooter.
   ///
   /// In en, this message translates to:
-  /// **'Version {version} · Changing theme or language never interrupts a game in progress.'**
-  String settingsFooter(String version);
+  /// **'Nothing here interrupts a game in progress. Theme and language apply at once; the difficulty applies to the next round.'**
+  String get settingsFooter;
+
+  /// No description provided for @settingsVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version}'**
+  String settingsVersion(String version);
 
   /// No description provided for @labelYourTurn.
   ///

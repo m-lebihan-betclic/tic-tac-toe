@@ -4,8 +4,7 @@ import 'package:setup_presentation/setup_presentation.dart';
 
 /// Composition's answer to the setup sheet's port.
 ///
-/// The sheet says it is done; this decides that means dismissing it. The sheet has two entry
-/// points and knows about neither.
+/// The sheet says it is done; this decides that means dismissing it.
 final class AppSetupRouting implements SetupRouting {
   final AppRouter _router;
 
@@ -19,6 +18,10 @@ final class AppSetupRouting implements SetupRouting {
 
 /// Presents the sheet over the board: non-dismissible, no drag, and the board left visible behind
 /// it. There is no route for it, because it is not a destination — it is a gate in front of one.
+///
+/// Non-dismissible is safe precisely because this is the cold start and nothing else: the sheet
+/// gates a board nobody has been named for, so there is nothing behind it to go back to. Changing
+/// a name later happens in settings, in the row that shows it.
 void presentSetupSheet(AppRouter router, Color barrierColor) {
   WidgetsBinding.instance.addPostFrameCallback((_) {
     final BuildContext? context = router.navigatorKey.currentContext;

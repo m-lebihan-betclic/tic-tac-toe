@@ -6,7 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:l10n/l10n.dart';
 
-Widget buildApplication() => ProviderScope(overrides: appProviders(), child: const _Application());
+/// [version] comes from the bundle, which the build stamped from `version:` in this app's
+/// `pubspec.yaml`. It arrives as an argument rather than being read here because reading it is a
+/// platform call, and composition is where the app's own facts are resolved.
+Widget buildApplication({required String version}) => ProviderScope(
+  overrides: appProviders(version: version),
+  child: const _Application(),
+);
 
 class _Application extends ConsumerWidget {
   const _Application();
@@ -18,6 +24,10 @@ class _Application extends ConsumerWidget {
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
+      // Always explicit, never null: composition resolves the device's own language down to the
+      // two the app ships, and settings renders that same answer as a selected segment. Leaving
+      // this null would let Flutter resolve one language while the screen reported another.
+      locale: ref.watch(localeProvider),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       onGenerateTitle: (context) => context.l10n.appTitle,
       routerConfig: ref.watch(appRouterProvider).config(),

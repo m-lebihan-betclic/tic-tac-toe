@@ -23,8 +23,9 @@
   "languageFrench": "Français",
   "settingsTitle": "Réglages",
   "settingsChange": "Modifier",
-  "settingsFooter": "Version {version} · Changer de thème ou de langue n'interrompt jamais une partie en cours.",
-  "@settingsFooter": {
+  "settingsFooter": "Rien ici n'interrompt une partie en cours. Le thème et la langue s'appliquent aussitôt ; la difficulté s'applique à la manche suivante.",
+  "settingsVersion": "Version {version}",
+  "@settingsVersion": {
     "placeholders": {
       "version": {
         "type": "String",

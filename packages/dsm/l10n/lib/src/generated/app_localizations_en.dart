@@ -69,8 +69,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsChange => 'Change';
 
   @override
-  String settingsFooter(String version) {
-    return 'Version $version · Changing theme or language never interrupts a game in progress.';
+  String get settingsFooter =>
+      'Nothing here interrupts a game in progress. Theme and language apply at once; the difficulty applies to the next round.';
+
+  @override
+  String settingsVersion(String version) {
+    return 'Version $version';
   }
 
   @override
