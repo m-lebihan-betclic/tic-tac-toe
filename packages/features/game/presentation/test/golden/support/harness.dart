@@ -91,16 +91,19 @@ ProviderContainer boardContainer({required GoldenTheme theme, int cpuSeed = 7}) 
 );
 
 /// Pumps the whole screen at [size], under [theme].
+/// [devicePixelRatio] is the capture's resolution, not the layout's: [size] stays logical either
+/// way. A ring that has to follow a 13px arc is worth capturing at 3x; a whole screen is not.
 Future<void> pumpBoard(
   WidgetTester tester, {
   required ProviderContainer container,
   required GoldenTheme theme,
+  double devicePixelRatio = 1,
   Size size = const Size(390, 780),
 }) async {
   addTearDown(container.dispose);
   tester.view
-    ..devicePixelRatio = 1
-    ..physicalSize = size;
+    ..devicePixelRatio = devicePixelRatio
+    ..physicalSize = size * devicePixelRatio;
   addTearDown(tester.view.reset);
 
   await tester.pumpWidget(
