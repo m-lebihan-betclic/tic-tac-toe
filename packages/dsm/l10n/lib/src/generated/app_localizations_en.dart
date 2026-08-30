@@ -109,7 +109,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String statusReset(String name) {
-    return 'Board cleared. Your turn, $name.';
+    return 'Your turn, $name.';
   }
 
   @override

@@ -109,7 +109,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String statusReset(String name) {
-    return 'Plateau effacé. À toi, $name.';
+    return 'À toi, $name.';
   }
 
   @override

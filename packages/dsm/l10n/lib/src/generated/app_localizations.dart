@@ -281,7 +281,7 @@ abstract class AppLocalizations {
   /// No description provided for @statusReset.
   ///
   /// In en, this message translates to:
-  /// **'Board cleared. Your turn, {name}.'**
+  /// **'Your turn, {name}.'**
   String statusReset(String name);
 
   /// No description provided for @actionReset.
