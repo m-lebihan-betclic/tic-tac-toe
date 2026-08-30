@@ -23,9 +23,9 @@ SettingsTheme defaultSettingsTheme(Ref ref) {
       fontSize: _linkFontSize,
       fontWeight: FontWeight.w500,
     ),
-    nameStyle: typography.body.copyWith(color: palette.onSurface, fontWeight: FontWeight.w500),
+    nameStyle: palette.onSurfaceText(typography.body).copyWith(fontWeight: FontWeight.w500),
     noteStyle: typography.body.copyWith(color: palette.onSurfaceMuted, fontSize: _noteFontSize),
-    titleStyle: typography.prominent.copyWith(color: palette.onSurface),
+    titleStyle: palette.onSurfaceText(typography.prominent),
   );
 }
 

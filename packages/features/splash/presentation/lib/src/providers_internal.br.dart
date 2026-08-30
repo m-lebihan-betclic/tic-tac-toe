@@ -22,6 +22,6 @@ SplashTheme defaultSplashTheme(Ref ref) {
     markOutlineColor: palette.outline,
     markPlayerColor: palette.markPlayer,
     taglineStyle: typography.body.copyWith(color: palette.onSurfaceMuted),
-    wordmarkStyle: typography.wordmark.copyWith(color: palette.onSurface),
+    wordmarkStyle: palette.onSurfaceText(typography.wordmark),
   );
 }

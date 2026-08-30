@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:design_components/design_components.dart';
 import 'package:design_providers/design_providers.dart' as design_providers;
 import 'package:design_tokens/design_tokens.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +112,18 @@ Future<void> pumpBoard(
       container: container,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: const RepaintBoundary(key: Key('golden'), child: GameScreen()),
+        // The app wraps every screen in this, so a screen golden that skipped it would
+        // pin a matrix the app never shows. The capture boundary sits above it for the
+        // same reason: `builder` wraps the navigator, so a boundary inside `home` would
+        // frame the screen and leave the overlay outside the picture.
+        builder: (context, child) => RepaintBoundary(
+          key: const Key('golden'),
+          child: CrtOverlay(
+            color: theme.palette.crtOverlay,
+            child: child ?? const SizedBox.shrink(),
+          ),
+        ),
+        home: const GameScreen(),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: ThemeData(

@@ -105,6 +105,20 @@ class AppPalette extends ThemeExtension<AppPalette> {
   /// Text sitting on a [primary] fill is always [background] of the same theme.
   Color get onPrimary => background;
 
+  /// [style] as this theme sets `onSurface` text: matrix blooms it, the other two leave it flat.
+  ///
+  /// The bloom belongs to the palette rather than to any feature theme, because it is a property
+  /// of the theme and not of a screen — a feature that forgot it would look subtly unfinished in
+  /// exactly one theme, which is the hardest kind of gap to notice.
+  ///
+  /// It is applied to the type that carries a screen — a title, the status sentence, the
+  /// wordmark — and not to every label: a 9px blur behind a 12px caption reads as blur rather
+  /// than as glow.
+  TextStyle onSurfaceText(TextStyle style) => switch (phosphorBloom) {
+    final Shadow bloom => style.copyWith(color: onSurface, shadows: <Shadow>[bloom]),
+    null => style.copyWith(color: onSurface),
+  };
+
   /// The pressed tone of a **filled** surface: the fill washed with 12% of its own foreground.
   /// Derived rather than tokenised, so it stays correct in all three themes and adding a new
   /// filled component never means adding a new colour.

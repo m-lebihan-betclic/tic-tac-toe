@@ -33,7 +33,7 @@ GameTheme defaultGameTheme(Ref ref) {
     markOutlineColor: palette.outline,
     markPlayerColor: palette.markPlayer,
     pressedDotColor: palette.outline.withValues(alpha: _pressedDotOpacity),
-    sentenceStyle: typography.title.copyWith(color: palette.onSurface),
+    sentenceStyle: palette.onSurfaceText(typography.title),
     turnDotColor: palette.primary,
     warningColor: palette.warning,
     warningStyle: typography.warningText(palette.warning),

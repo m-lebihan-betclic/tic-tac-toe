@@ -26,7 +26,7 @@ SetupTheme defaultSetupTheme(Ref ref) {
       color: palette.onSurfaceMuted,
       fontSize: _subtitleFontSize,
     ),
-    titleStyle: typography.title.copyWith(color: palette.onSurface),
+    titleStyle: palette.onSurfaceText(typography.title),
   );
 }
 

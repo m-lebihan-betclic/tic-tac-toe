@@ -11,6 +11,7 @@ resolution: workspace
 dependencies:
   app_providers:
   app_router:
+  design_components:
   design_providers:
   design_tokens:
   flutter:

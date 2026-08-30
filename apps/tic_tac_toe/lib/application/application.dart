@@ -1,5 +1,6 @@
 import 'package:app_providers/app_providers.dart';
 import 'package:app_router/app_router.dart';
+import 'package:design_components/design_components.dart';
 import 'package:design_providers/design_providers.dart';
 import 'package:design_tokens/design_tokens.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +24,15 @@ class _Application extends ConsumerWidget {
     final typography = ref.watch(appTypographyProvider);
 
     return MaterialApp.router(
+      // Every screen, once. The scanlines are app chrome rather than any feature's business, and
+      // `builder` wraps the navigator — so routes pushed later and the setup sheet presented over
+      // the board are all inside it without a single screen knowing.
+      builder: (context, child) => CrtOverlay(
+        color: palette.crtOverlay,
+        // `builder` types the navigator as nullable and never passes null; the fallback is here
+        // so the overlay's own contract can stay non-null.
+        child: child ?? const SizedBox.shrink(),
+      ),
       debugShowCheckedModeBanner: false,
       // Always explicit, never null: composition resolves the device's own language down to the
       // two the app ships, and settings renders that same answer as a selected segment. Leaving
