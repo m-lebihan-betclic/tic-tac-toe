@@ -15,32 +15,6 @@ import 'package:session_domain/session_domain.dart';
 /// board paints itself in the grid colour and lets it show through, so the lines are the
 /// background rather than nine borders doubling up where cells meet. That is what makes the same
 /// layout correct at 320 and at 390.
-/// Which of the board's own corners a cell sits in, if any.
-///
-/// The four corner cells are clipped by the board's rounded edge, so anything one of them draws
-/// on its own outline — the invalid ring — has to be rounded the same way or it loses its corner
-/// to the clip. The board hands this down because the board is what owns the clip; a cell
-/// re-deriving it would be a second copy of the radius.
-BorderRadius _cornerFor({required int column, required int row}) {
-  final bool bottom = row == _side - 1;
-  final bool left = column == 0;
-  final bool right = column == _side - 1;
-  final bool top = row == 0;
-
-  return BorderRadius.only(
-    bottomLeft: bottom && left ? _innerCorner : Radius.zero,
-    bottomRight: bottom && right ? _innerCorner : Radius.zero,
-    topLeft: top && left ? _innerCorner : Radius.zero,
-    topRight: top && right ? _innerCorner : Radius.zero,
-  );
-}
-
-/// The radius the cells actually meet: the board's own, less the hairline of padding that draws
-/// its outer edge.
-const Radius _innerCorner = Radius.circular(AppRadius.board - AppSizing.hairline);
-
-const int _side = 3;
-
 class GameBoard extends ConsumerWidget {
   /// Dimmed while the CPU is thinking; fully lit again the moment the game ends, because the
   /// result is the reward and nothing should dim it.
@@ -91,13 +65,7 @@ class GameBoard extends ConsumerWidget {
                           child: Row(
                             spacing: AppSizing.hairline,
                             children: <Widget>[
-                              for (int column = 0; column < _side; column++)
-                                Expanded(
-                                  child: SlotButton(
-                                    corner: _cornerFor(row: row, column: column),
-                                    slot: row * _side + column,
-                                  ),
-                                ),
+                              for (int column = 0; column < _side; column++) _cell(row * _side + column),
                             ],
                           ),
                         ),
@@ -116,3 +84,38 @@ class GameBoard extends ConsumerWidget {
     );
   }
 }
+
+/// One cell, carrying the board corner it sits in.
+Widget _cell(int slot) => Expanded(
+  child: SlotButton(corner: _slotCorners[slot], slot: slot),
+);
+
+/// The radius the cells actually meet: the board's own, less the hairline of padding that draws
+/// its outer edge.
+const Radius _innerCorner = Radius.circular(AppRadius.board - AppSizing.hairline);
+
+const int _side = 3;
+
+/// Which of the board's own corners each slot sits in — row-major, so the four rounded entries
+/// are the four corners of the grid and the five between them are square.
+///
+/// The corner cells are clipped by the board's rounded edge, so anything one of them draws on its
+/// own outline — the invalid ring — has to be rounded the same way or it loses its corner to the
+/// clip. It lives here rather than in the cell because the board is what owns the clip, and a
+/// cell re-deriving the radius would be a second copy of it.
+///
+/// Written out rather than computed per build. The nine values never change, so the grid loop
+/// hands out canonical instances instead of allocating nine equal ones on both halves of every
+/// turn handover — and equal-but-distinct `BorderRadius`es would compare field by field where
+/// identical ones compare by reference.
+const List<BorderRadius> _slotCorners = <BorderRadius>[
+  BorderRadius.only(topLeft: _innerCorner),
+  BorderRadius.zero,
+  BorderRadius.only(topRight: _innerCorner),
+  BorderRadius.zero,
+  BorderRadius.zero,
+  BorderRadius.zero,
+  BorderRadius.only(bottomLeft: _innerCorner),
+  BorderRadius.zero,
+  BorderRadius.only(bottomRight: _innerCorner),
+];
