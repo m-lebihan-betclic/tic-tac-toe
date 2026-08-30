@@ -8,33 +8,44 @@ import 'package:game_domain/game_domain.dart';
 import 'package:game_presentation/game_presentation.dart' as game_presentation;
 import 'package:game_presentation/src/game_screen.dart';
 import 'package:game_presentation/src/notifiers/game_ui_state_notifier.br.dart';
+import 'package:game_presentation/src/state/game_ui_state.br.dart';
 import 'package:game_presentation/src/state/status_banner.br.dart';
+import 'package:givn/givn.dart';
 import 'package:l10n/l10n.dart';
 import 'package:session_domain/session_domain.dart';
 import 'package:session_domain/session_domain.dart' as session_domain;
+import 'package:shouldly/shouldly.dart';
 
 /// Nothing is stored, which is the state a cold start is in: the notifier falls back to
 /// `Difficulty.initial`. The contract still has to be fed — an unfed one throws, by design.
 final class _EmptyPreferences implements PreferencesRepository {
   const _EmptyPreferences();
+
   @override
   Difficulty? readDifficulty() => null;
+
   @override
   AppLocale? readLocale() => null;
+
   @override
   AppTheme? readTheme() => null;
+
   @override
   void writeDifficulty(Difficulty difficulty) {}
+
   @override
   void writeLocale(AppLocale locale) {}
+
   @override
   void writeTheme(AppTheme theme) {}
 }
 
 final class _NoopRouting implements game_presentation.GameRouting {
   const _NoopRouting();
+
   @override
   void onHistoryRequested() {}
+
   @override
   void onSettingsRequested() {}
 }
@@ -51,13 +62,14 @@ ProviderContainer _container() => ProviderContainer(
       preferences: Provider<PreferencesRepository>((ref) => const _EmptyPreferences()),
     ),
     ...game_presentation.bindProviders(
-      player: Provider<Player>((ref) => Player.create('Morgan').getOrNull()!),
+      player: Provider<Player>((ref) => Player.create('Morgan').getOrThrow()),
       routing: (ref) => const _NoopRouting(),
     ),
   ],
 );
 
-Future<void> _pumpScreen(WidgetTester tester, ProviderContainer container) async {
+Future<void> _pumpBoard(WidgetTester tester, ProviderContainer container) async {
+  addTearDown(container.dispose);
   // A phone, not the 800×600 default: the board is square and takes the height it is given.
   tester.view
     ..devicePixelRatio = 1
@@ -82,51 +94,71 @@ Future<void> _pumpScreen(WidgetTester tester, ProviderContainer container) async
 }
 
 void main() {
-  testWidgets('a move hands over to the CPU, which replies after the beat', (tester) async {
-    final ProviderContainer container = _container();
-    addTearDown(container.dispose);
-    await _pumpScreen(tester, container);
+  givenWidget("an empty board on the player's turn", (_) => _container())
+      .when('the player takes the centre square and the CPU is given its beat', (
+        container,
+        _,
+        tester,
+        _,
+      ) async {
+        await _pumpBoard(tester, container);
 
-    container.read(gameUiStateProvider.notifier).play(4);
-    await tester.pump();
+        container.read(gameUiStateProvider.notifier).play(4);
+        await tester.pump();
+        final GameUiState duringTheBeat = container.read(gameUiStateProvider);
 
-    expect(container.read(gameUiStateProvider).game.board.markAt(4), Mark.x);
-    expect(container.read(gameUiStateProvider).banner, isA<Thinking>());
-    expect(container.read(gameUiStateProvider).game.board.moveCount, 1, reason: 'CPU has not moved yet');
+        await tester.pump(AppMotion.cpuThinkingDelay);
 
-    await tester.pump(AppMotion.cpuThinkingDelay);
+        return (duringTheBeat, container.read(gameUiStateProvider));
+      })
+      .then('the mark lands, the CPU is seen thinking, and it replies once', (result, _, _) {
+        final (GameUiState duringTheBeat, GameUiState afterTheBeat) = result;
 
-    expect(container.read(gameUiStateProvider).game.board.moveCount, 2, reason: 'CPU replied');
-    expect(container.read(gameUiStateProvider).banner, isA<Turn>());
-  });
+        duringTheBeat.game.board.markAt(4).should.be(Mark.x);
+        duringTheBeat.banner.should.be(const StatusBanner.thinking());
+        duringTheBeat.game.board.moveCount.should.be(1);
 
-  testWidgets('a reset landing mid-beat cancels it — the CPU never lands on the cleared board', (tester) async {
-    final ProviderContainer container = _container();
-    addTearDown(container.dispose);
-    await _pumpScreen(tester, container);
+        afterTheBeat.game.board.moveCount.should.be(2);
+        afterTheBeat.banner.should.be(const StatusBanner.turn());
+      });
 
-    container.read(gameUiStateProvider.notifier).play(0);
-    await tester.pump();
-    container.read(gameUiStateProvider.notifier).reset();
-    await tester.pump(AppMotion.cpuThinkingDelay * 2);
+  givenWidget("a board waiting on the CPU's beat", (_) => _container())
+      .when('the player clears it before the beat lands', (container, _, tester, _) async {
+        await _pumpBoard(tester, container);
 
-    expect(container.read(gameUiStateProvider).game.board, Board.empty);
-    expect(container.read(gameUiStateProvider).banner, isA<Cleared>());
-  });
+        container.read(gameUiStateProvider.notifier).play(0);
+        await tester.pump();
+        container.read(gameUiStateProvider.notifier).reset();
+        await tester.pump(AppMotion.cpuThinkingDelay * 2);
 
-  testWidgets('tapping a taken slot marks it invalid without changing the board', (tester) async {
-    final ProviderContainer container = _container();
-    addTearDown(container.dispose);
-    await _pumpScreen(tester, container);
+        return container.read(gameUiStateProvider);
+      })
+      .then('the board stays empty — the CPU never lands on a board that no longer exists', (
+        state,
+        _,
+        _,
+      ) {
+        state.game.board.should.be(Board.empty);
+        state.banner.should.be(const StatusBanner.cleared());
+      });
 
-    container.read(gameUiStateProvider.notifier).play(4);
-    await tester.pump(AppMotion.cpuThinkingDelay);
-    final Board before = container.read(gameUiStateProvider).game.board;
+  givenWidget('a board whose centre square is already taken', (_) => _container())
+      .when('the player takes it again', (container, _, tester, _) async {
+        await _pumpBoard(tester, container);
 
-    container.read(gameUiStateProvider.notifier).play(4);
-    await tester.pump();
+        container.read(gameUiStateProvider.notifier).play(4);
+        await tester.pump(AppMotion.cpuThinkingDelay);
+        final Board before = container.read(gameUiStateProvider).game.board;
 
-    expect(container.read(gameUiStateProvider).game.board, before);
-    expect(container.read(gameUiStateProvider).banner, const StatusBanner.invalid(slot: 4));
-  });
+        container.read(gameUiStateProvider.notifier).play(4);
+        await tester.pump();
+
+        return (before, container.read(gameUiStateProvider));
+      })
+      .then('the square is marked invalid and the board is unchanged', (result, _, _) {
+        final (Board before, GameUiState state) = result;
+
+        state.game.board.should.be(before);
+        state.banner.should.be(const StatusBanner.invalid(slot: 4));
+      });
 }

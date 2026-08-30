@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/misc.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:givn/givn.dart';
 import 'package:l10n/l10n.dart';
 import 'package:session_domain/session_domain.dart';
 import 'package:session_domain/session_domain.dart' as session_domain;
 import 'package:settings_presentation/settings_presentation.dart' as settings_presentation;
 import 'package:settings_presentation/src/widgets/nickname_row.dart';
+import 'package:shouldly/shouldly.dart';
 
-/// Records what was written, so a test can assert that nothing was — which is half of what this
-/// row promises.
+/// Records what was written, so a scenario can assert that nothing was — which is half of what
+/// this row promises.
 final class _RecordingPlayerRepository implements PlayerRepository {
   final Player initial;
   final List<Player> written = <Player>[];
@@ -34,25 +36,34 @@ final class _NoopRouting implements settings_presentation.SettingsRouting {
 
 Player _player(String name) => Player.create(name).getOrThrow();
 
-Future<void> _pumpRow(WidgetTester tester, _RecordingPlayerRepository repository) async {
+/// The repository is the scenario's subject, so it is built once and read back from the context
+/// by the overrides — a second instance would record writes nobody asserts on.
+_RecordingPlayerRepository _repositoryOf(TestContext context) =>
+    context.namedParameterOf<_RecordingPlayerRepository>(_repositoryKey);
+
+const String _repositoryKey = 'repository';
+
+List<Override> _overrides(TestContext context) => <Override>[
+  ...design_providers.bindProviders(
+    palette: Provider<AppPalette>((ref) => AppPalette.light()),
+    typography: Provider<AppTypography>((ref) => AppTypography.system()),
+  ),
+  ...session_domain.bindProviders(
+    player: Provider<PlayerRepository>((ref) => _repositoryOf(context)),
+  ),
+  ...settings_presentation.bindProviders(
+    locale: Provider<AppLocale>((ref) => AppLocale.en),
+    player: Provider<Player>((ref) => _repositoryOf(context).initial),
+    routing: (ref) => const _NoopRouting(),
+    theme: Provider<AppTheme>((ref) => AppTheme.light),
+    version: Provider<String>((ref) => '1.0.0'),
+  ),
+];
+
+Future<void> _pumpRow(WidgetTester tester, List<Override> providers) async {
   await tester.pumpWidget(
     ProviderScope(
-      overrides: <Override>[
-        ...design_providers.bindProviders(
-          palette: Provider<AppPalette>((ref) => AppPalette.light()),
-          typography: Provider<AppTypography>((ref) => AppTypography.system()),
-        ),
-        ...session_domain.bindProviders(
-          player: Provider<PlayerRepository>((ref) => repository),
-        ),
-        ...settings_presentation.bindProviders(
-          locale: Provider<AppLocale>((ref) => AppLocale.en),
-          player: Provider<Player>((ref) => repository.initial),
-          routing: (ref) => const _NoopRouting(),
-          theme: Provider<AppTheme>((ref) => AppTheme.light),
-          version: Provider<String>((ref) => '1.0.0'),
-        ),
-      ],
+      overrides: providers,
       child: MaterialApp(
         home: const Scaffold(body: NicknameRow()),
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -67,56 +78,104 @@ Future<void> _pumpRow(WidgetTester tester, _RecordingPlayerRepository repository
   await tester.pump();
 }
 
+String _fieldText(WidgetTester tester) => tester.widget<TextField>(find.byType(TextField)).controller?.text ?? '';
+
 void main() {
-  testWidgets('the return key saves the new nickname', (tester) async {
-    final _RecordingPlayerRepository repository = _RecordingPlayerRepository(_player('Morgan'));
-    await _pumpRow(tester, repository);
+  givenWidget(
+        'a player called Morgan',
+        _repositoryOf,
+        namedParameters: <String, Object?>{_repositoryKey: _RecordingPlayerRepository(_player('Morgan'))},
+        providers: _overrides,
+      )
+      .when('a new nickname is typed and the return key is pressed', (repository, _, tester, providers) async {
+        await _pumpRow(tester, providers);
+        await tester.enterText(find.byType(TextField), 'Ada');
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pump();
 
-    await tester.enterText(find.byType(TextField), 'Ada');
-    await tester.testTextInput.receiveAction(TextInputAction.done);
-    await tester.pump();
+        return repository.written;
+      })
+      .then('the new nickname is saved', (written, _, _) => written.should.be(<Player>[_player('Ada')]));
 
-    expect(repository.written, <Player>[_player('Ada')]);
-  });
+  givenWidget(
+        'a player called Morgan',
+        _repositoryOf,
+        namedParameters: <String, Object?>{_repositoryKey: _RecordingPlayerRepository(_player('Morgan'))},
+        providers: _overrides,
+      )
+      .when('a new nickname is typed and the field loses focus without a return', (
+        repository,
+        _,
+        tester,
+        providers,
+      ) async {
+        await _pumpRow(tester, providers);
+        await tester.enterText(find.byType(TextField), 'Ada');
+        FocusManager.instance.primaryFocus?.unfocus();
+        await tester.pump();
 
-  testWidgets('losing focus without the return key changes nothing, on screen or in the session', (
-    tester,
-  ) async {
-    final _RecordingPlayerRepository repository = _RecordingPlayerRepository(_player('Morgan'));
-    await _pumpRow(tester, repository);
+        return (repository.written, _fieldText(tester));
+      })
+      .then('nothing is saved and the row goes back to the name the session holds', (result, _, _) {
+        final (List<Player> written, String field) = result;
 
-    await tester.enterText(find.byType(TextField), 'Ada');
-    FocusManager.instance.primaryFocus?.unfocus();
-    await tester.pump();
+        written.should.beEmpty();
+        field.should.be('Morgan');
+      });
 
-    expect(repository.written, isEmpty);
-    // The field goes back too, or the row would show a name the session does not hold.
-    expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, 'Morgan');
-  });
+  givenWidget(
+        'a player called Morgan',
+        _repositoryOf,
+        namedParameters: <String, Object?>{_repositoryKey: _RecordingPlayerRepository(_player('Morgan'))},
+        providers: _overrides,
+      )
+      .when('the field is emptied to whitespace and the return key is pressed', (
+        repository,
+        _,
+        tester,
+        providers,
+      ) async {
+        await _pumpRow(tester, providers);
+        await tester.enterText(find.byType(TextField), '   ');
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pump();
 
-  testWidgets('a nickname that is only whitespace is a change that was never made', (tester) async {
-    final _RecordingPlayerRepository repository = _RecordingPlayerRepository(_player('Morgan'));
-    await _pumpRow(tester, repository);
+        return (repository.written, _fieldText(tester));
+      })
+      .then('it is a change that was never made, so there is no error to show', (result, _, _) {
+        final (List<Player> written, String field) = result;
 
-    await tester.enterText(find.byType(TextField), '   ');
-    await tester.testTextInput.receiveAction(TextInputAction.done);
-    await tester.pump();
+        written.should.beEmpty();
+        field.should.be('Morgan');
+      });
 
-    expect(repository.written, isEmpty);
-    expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, 'Morgan');
-  });
+  givenWidget(
+        'a player called Morgan',
+        _repositoryOf,
+        namedParameters: <String, Object?>{_repositoryKey: _RecordingPlayerRepository(_player('Morgan'))},
+        providers: _overrides,
+      )
+      .when('a nickname padded with spaces is typed and the return key is pressed', (
+        repository,
+        _,
+        tester,
+        providers,
+      ) async {
+        await _pumpRow(tester, providers);
+        await tester.enterText(find.byType(TextField), '  Ada  ');
+        await tester.testTextInput.receiveAction(TextInputAction.done);
+        await tester.pump();
 
-  testWidgets('the domain trims, and the row shows what was stored rather than what was typed', (
-    tester,
-  ) async {
-    final _RecordingPlayerRepository repository = _RecordingPlayerRepository(_player('Morgan'));
-    await _pumpRow(tester, repository);
+        return (repository.written, _fieldText(tester));
+      })
+      .then('the domain trims it, and the row shows what was stored rather than what was typed', (
+        result,
+        _,
+        _,
+      ) {
+        final (List<Player> written, String field) = result;
 
-    await tester.enterText(find.byType(TextField), '  Ada  ');
-    await tester.testTextInput.receiveAction(TextInputAction.done);
-    await tester.pump();
-
-    expect(repository.written, <Player>[_player('Ada')]);
-    expect(tester.widget<TextField>(find.byType(TextField)).controller?.text, 'Ada');
-  });
+        written.should.be(<Player>[_player('Ada')]);
+        field.should.be('Ada');
+      });
 }
