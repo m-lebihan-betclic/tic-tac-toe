@@ -1,5 +1,10 @@
-# Launch Screen Assets
+# LaunchImage
 
-You can customize the launch screen with your own desired assets by replacing the image files in this directory.
+The nine-square mark, on the theme's ground, in light and dark.
 
-You can also do it by opening your Flutter project's Xcode project with `open ios/Runner.xcworkspace`, selecting `Runner/Assets.xcassets` in the Project Navigator and dropping in the desired images.
+**Do not edit these by hand.** They are rendered from the same widget the splash uses, by
+`apps/tic_tac_toe/test/golden/launch_image_test.dart` — `mise run goldens-update` writes them and
+`mise run goldens` fails if the shipped image and the mark have parted company.
+
+The storyboard centres the image in the window, and `SplashScreen` centres the mark on the
+screen, so the mark does not move when Flutter takes over.

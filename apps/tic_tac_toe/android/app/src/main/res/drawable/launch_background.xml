@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- The window background while the process starts. Resolves to AppPalette.light().background
-     or, under res/values-night/, AppPalette.dark().background. -->
+<!-- The window while the process starts: the theme's ground, and the mark centred on it.
+     Both halves are the app's, not a placeholder — the Flutter splash centres the same mark in
+     the same place, so the handover does not move it. `res/values-night/` supplies the dark
+     ground and `res/drawable-night-xxxhdpi/` the dark mark. -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/launch_background" />
+    <item>
+        <bitmap android:gravity="center" android:src="@drawable/launch_mark" />
+    </item>
 </layer-list>
