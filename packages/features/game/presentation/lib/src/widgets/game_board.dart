@@ -44,37 +44,40 @@ class GameBoard extends ConsumerWidget {
         aspectRatio: 1,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            // The grid colour fills the container and shows through the hairline gaps, so the
-            // lines are the background rather than nine borders doubling up where cells meet.
-            // The same colour outlines it, which is what closes the panel on its outer edge.
-            border: Border.all(color: theme.gridColor, width: AppSizing.hairline),
             borderRadius: BorderRadius.circular(AppRadius.board),
             color: theme.gridColor,
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(AppRadius.board),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  spacing: AppSizing.hairline,
-                  children: <Widget>[
-                    for (int row = 0; row < 3; row++)
-                      Expanded(
-                        child: Row(
-                          spacing: AppSizing.hairline,
-                          children: <Widget>[
-                            for (int column = 0; column < 3; column++)
-                              Expanded(child: SlotButton(slot: row * 3 + column)),
-                          ],
+          // The grid colour fills the container and shows through wherever the cells do not
+          // cover it: a hairline between them, and a hairline of padding around them. The outer
+          // edge is that padding rather than a border — a `border` on the decoration would be
+          // painted and then covered, because the cells are not inset for it.
+          child: Padding(
+            padding: const EdgeInsets.all(AppSizing.hairline),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppRadius.board - AppSizing.hairline),
+              child: Stack(
+                children: <Widget>[
+                  Column(
+                    spacing: AppSizing.hairline,
+                    children: <Widget>[
+                      for (int row = 0; row < 3; row++)
+                        Expanded(
+                          child: Row(
+                            spacing: AppSizing.hairline,
+                            children: <Widget>[
+                              for (int column = 0; column < 3; column++)
+                                Expanded(child: SlotButton(slot: row * 3 + column)),
+                            ],
+                          ),
                         ),
-                      ),
-                  ],
-                ),
-                if (winningLines.isNotEmpty)
-                  Positioned.fill(
-                    child: WinLine(color: theme.winLineColor, lines: winningLines),
+                    ],
                   ),
-              ],
+                  if (winningLines.isNotEmpty)
+                    Positioned.fill(
+                      child: WinLine(color: theme.winLineColor, lines: winningLines),
+                    ),
+                ],
+              ),
             ),
           ),
         ),

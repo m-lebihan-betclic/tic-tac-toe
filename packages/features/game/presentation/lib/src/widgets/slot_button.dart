@@ -79,13 +79,20 @@ class _CellState extends State<_Cell> {
       onTapUp: widget.onPressed == null ? null : (_) => _setPressed(false),
       child: AnimatedContainer(
         alignment: Alignment.center,
-        decoration: BoxDecoration(
-          border: widget.ringColor == null
-              ? null
-              : Border.all(color: widget.ringColor!, width: SlotButton._invalidRingWidth),
-          color: showPressed ? theme.cellPressedColor : theme.cellColor,
-        ),
+        decoration: BoxDecoration(color: showPressed ? theme.cellPressedColor : theme.cellColor),
         duration: AppMotion.press,
+        // The ring is inset rather than drawn on the cell's edge. A corner cell sits against the
+        // board's rounded clip, and an edge-hugging ring loses its corner to it.
+        foregroundDecoration: widget.ringColor == null
+            ? null
+            : BoxDecoration(
+                border: Border.all(
+                  color: widget.ringColor!,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                  width: SlotButton._invalidRingWidth,
+                ),
+                borderRadius: BorderRadius.circular(AppRadius.mark),
+              ),
         child: switch (widget.mark) {
           Mark.o => CpuMark(color: theme.markCpuColor),
           Mark.x => PlayerMark(color: theme.markPlayerColor),

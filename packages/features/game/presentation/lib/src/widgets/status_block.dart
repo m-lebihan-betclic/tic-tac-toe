@@ -13,13 +13,17 @@ import 'package:session_domain/session_domain.dart';
 /// Fixed height, so the board never shifts when the wording changes — the three board states
 /// differ in what this says and in nothing else.
 class StatusBlock extends ConsumerWidget {
-  /// Two lines of [GameTheme.sentenceStyle] plus the label row and its gap. Fixed, because the
-  /// board must not shift when the wording changes — and tall enough for two lines, because
-  /// `Board cleared. Your turn, {name}.` is two on a narrow screen and one on a wide one.
-  static const double _height = 116;
+  /// Two lines of [GameTheme.sentenceStyle] plus the label row and its gap — as a **minimum**,
+  /// not a fixed size.
+  ///
+  /// The floor is what the spec is really asking for: the three board states differ only in what
+  /// this says, so reserving two lines means the board does not jump as the wording changes
+  /// between them. Making it a ceiling as well is what cropped a descender, and would crop
+  /// French or a larger text scale next. Past the floor the block grows and the board, which is
+  /// Expanded, gives up the height.
+  static const double _minHeight = 116;
   static const double _sentenceGap = 12;
   static const double _labelGap = 8;
-  static const int _sentenceMaxLines = 2;
 
   const StatusBlock({super.key});
 
@@ -51,10 +55,11 @@ class StatusBlock extends ConsumerWidget {
       Turn() => (theme.turnDotColor, l10n.labelYourTurn, l10n.statusPlayerTurn(name), false),
     };
 
-    return SizedBox(
-      height: _height,
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: _minHeight),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -66,17 +71,7 @@ class StatusBlock extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: _sentenceGap),
-          // Expanded, so the sentence is bounded by the block instead of overflowing it. The
-          // height stays fixed — the board must not shift when the wording changes — and a
-          // sentence that would need a third line ellipsises rather than pushing the board down.
-          Expanded(
-            child: Text(
-              sentence,
-              maxLines: _sentenceMaxLines,
-              overflow: TextOverflow.ellipsis,
-              style: isWarning ? theme.warningStyle : theme.sentenceStyle,
-            ),
-          ),
+          Text(sentence, style: isWarning ? theme.warningStyle : theme.sentenceStyle),
         ],
       ),
     );
