@@ -96,8 +96,14 @@ class _CellState extends State<_Cell> {
           children: <Widget>[
             Center(
               child: switch (widget.mark) {
-                Mark.o => CpuMark(color: theme.markCpuColor),
-                Mark.x => PlayerMark(color: theme.markPlayerColor),
+                Mark.o => _MarkIn(
+                  key: const ValueKey<Mark>(Mark.o),
+                  child: CpuMark(color: theme.markCpuColor),
+                ),
+                Mark.x => _MarkIn(
+                  key: const ValueKey<Mark>(Mark.x),
+                  child: PlayerMark(color: theme.markPlayerColor),
+                ),
                 null =>
                   showPressed
                       ? SizedBox.square(
@@ -132,6 +138,41 @@ class _CellState extends State<_Cell> {
   void _setPressed(bool value) {
     if (_pressed != value) setState(() => _pressed = value);
   }
+}
+
+/// The mark's entrance: one scale-up on the frame it lands, and never again.
+///
+/// It reacts to an event — a mark being placed — so it runs from `initState` and only exists
+/// while there is a mark to show. A rebuild for any other reason finds the same state and leaves
+/// it alone; a reset removes the widget, so the next mark in that cell arrives fresh. The key is
+/// what keeps X→O in one cell honest, since both branches are this same type.
+class _MarkIn extends StatefulWidget {
+  final Widget child;
+
+  const _MarkIn({required this.child, super.key});
+
+  @override
+  State<_MarkIn> createState() => _MarkInState();
+}
+
+class _MarkInState extends State<_MarkIn> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    duration: AppMotion.markIn,
+    vsync: this,
+  )..forward();
+
+  late final Animation<double> _scale = Tween<double>(begin: AppMotion.markInScaleFrom, end: 1).animate(
+    CurvedAnimation(curve: AppMotion.markInCurve, parent: _controller),
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => ScaleTransition(scale: _scale, child: widget.child);
 }
 
 /// Fires once when the cell becomes invalid, and never again until it stops being invalid.
