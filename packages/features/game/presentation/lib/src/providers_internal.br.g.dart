@@ -128,7 +128,7 @@ final class CpuBeatProvider
   }
 }
 
-String _$cpuBeatHash() => r'a64df3efe05a671699d1e5787ae686d222dcf174';
+String _$cpuBeatHash() => r'b6be0646b1f0a483a4ddb589b41e8fcf897d7042';
 
 /// The seeded seam. Nothing but a test has a reason to override it.
 

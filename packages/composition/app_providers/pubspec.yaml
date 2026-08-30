@@ -17,6 +17,8 @@ dependencies:
   flutter_riverpod: ^3.2.1
   game_presentation:
   session_domain:
+  setup_data:
+  setup_presentation:
   splash_presentation:
 
 dev_dependencies:

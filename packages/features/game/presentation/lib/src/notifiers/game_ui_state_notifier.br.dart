@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:game_domain/game_domain.dart';
-import 'package:game_presentation/src/providers_di.br.dart';
 import 'package:game_presentation/src/providers_internal.br.dart';
 import 'package:game_presentation/src/state/game_ui_state.br.dart';
 import 'package:game_presentation/src/state/status_banner.br.dart';
@@ -31,8 +30,9 @@ class GameUiStateNotifier extends _$GameUiStateNotifier {
       banner: const StatusBanner.turn(),
       // Difficulty comes from the stored preference once there is one to read; until then a
       // session starts at the domain's own default.
-      game: ref.read(startRoundProvider)(difficulty: Difficulty.initial),
-      player: ref.watch(playerProvider),
+      game: ref.read(startRoundProvider)(
+        difficulty: ref.watch(storedDifficultyProvider) ?? Difficulty.initial,
+      ),
       scores: const Scores(),
     );
   }

@@ -1,4 +1,5 @@
 export 'src/app_button.dart';
+export 'src/app_chip.dart';
 export 'src/app_icon_button.dart';
 export 'src/app_separator.dart';
 export 'src/app_stat.dart';

@@ -14,6 +14,7 @@ dependencies:
     sdk: flutter
   game_presentation:
   riverpod_annotation: ^4.0.2
+  setup_presentation:
   splash_presentation:
 
 dev_dependencies:

@@ -14,7 +14,6 @@ abstract class GameUiState with _$GameUiState {
   const factory GameUiState({
     required StatusBanner banner,
     required Game game,
-    required Player player,
     required Scores scores,
   }) = _GameUiState;
 

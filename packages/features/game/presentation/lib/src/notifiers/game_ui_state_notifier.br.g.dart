@@ -54,7 +54,7 @@ final class GameUiStateNotifierProvider
 }
 
 String _$gameUiStateNotifierHash() =>
-    r'51d8b6909229a69a7f4e0c4fa92f0072baefdee8';
+    r'd76444b821074816ef19680e7d7e3ba379650a6f';
 
 /// Drives the board.
 ///

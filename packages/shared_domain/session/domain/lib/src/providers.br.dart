@@ -1,4 +1,13 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:session_domain/src/behaviors/read_difficulty.dart';
+import 'package:session_domain/src/behaviors/read_player.dart';
+import 'package:session_domain/src/behaviors/read_theme.dart';
+import 'package:session_domain/src/behaviors/save_difficulty.dart';
+import 'package:session_domain/src/behaviors/save_player.dart';
+import 'package:session_domain/src/behaviors/save_theme.dart';
+import 'package:session_domain/src/entities/app_theme.dart';
+import 'package:session_domain/src/entities/difficulty.dart';
+import 'package:session_domain/src/entities/player.dart';
 import 'package:session_domain/src/providers_di.br.dart';
 import 'package:session_domain/src/repositories/history_repository.dart';
 import 'package:session_domain/src/repositories/player_repository.dart';
@@ -10,18 +19,48 @@ part 'providers.br.g.dart';
 /// independent seams: history is droppable, preferences outlive a round, and the player is
 /// written from two different features. Composition can swap any one of them without touching
 /// the others.
+/// Each contract is fed independently, because they gain implementations at different times: the
+/// setup sheet supplies the player and the preferences long before anything renders a history.
+/// One left out still throws when it is read, so a missing implementation fails loudly rather
+/// than silently returning nothing.
 List<Override> bindProviders({
-  required ProviderListenable<HistoryRepository> history,
-  required ProviderListenable<PlayerRepository> player,
-  required ProviderListenable<PreferencesRepository> preferences,
-}) => [
-  historyRepositoryProvider.overrideWith((ref) => ref.watch(history)),
-  playerRepositoryProvider.overrideWith((ref) => ref.watch(player)),
-  preferencesRepositoryProvider.overrideWith((ref) => ref.watch(preferences)),
+  ProviderListenable<HistoryRepository>? history,
+  ProviderListenable<PlayerRepository>? player,
+  ProviderListenable<PreferencesRepository>? preferences,
+}) => <Override>[
+  if (history != null) historyRepositoryProvider.overrideWith((ref) => ref.watch(history)),
+  if (player != null) playerRepositoryProvider.overrideWith((ref) => ref.watch(player)),
+  if (preferences != null) preferencesRepositoryProvider.overrideWith((ref) => ref.watch(preferences)),
 ];
 
+// Reads expose the *result*; writes expose the bare `call`, because the caller invokes those
+// later. A read exposed as a function would be called once and never hear about the next write.
+//
 // Public API: expose behaviors as providers — never the raw repository, never a behavior
 // instance. A behavior provider returns either the *result* of calling it, or its bare `call`
 // when the caller needs to invoke it later.
+//
+// This is what keeps presentation off the contracts: a feature reads a repository through these
+// or not at all, and providers_di is never exported.
+
+typedef SaveDifficultyFun = void Function(Difficulty difficulty);
+typedef SavePlayerFun = void Function(Player player);
+typedef SaveThemeFun = void Function(AppTheme theme);
+
 @riverpod
-void dummySessionDomain(Ref _) {}
+Difficulty? storedDifficulty(Ref ref) => ReadDifficulty(preferences: ref.watch(preferencesRepositoryProvider))();
+
+@riverpod
+Player? storedPlayer(Ref ref) => ReadPlayer(player: ref.watch(playerRepositoryProvider))();
+
+@riverpod
+AppTheme? storedTheme(Ref ref) => ReadTheme(preferences: ref.watch(preferencesRepositoryProvider))();
+
+@riverpod
+SaveDifficultyFun saveDifficulty(Ref ref) => SaveDifficulty(preferences: ref.watch(preferencesRepositoryProvider)).call;
+
+@riverpod
+SavePlayerFun savePlayer(Ref ref) => SavePlayer(player: ref.watch(playerRepositoryProvider)).call;
+
+@riverpod
+SaveThemeFun saveTheme(Ref ref) => SaveTheme(preferences: ref.watch(preferencesRepositoryProvider)).call;

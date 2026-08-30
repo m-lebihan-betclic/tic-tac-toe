@@ -30,7 +30,9 @@ class StatusBlock extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final StatusBanner banner = ref.watch(gameUiStateProvider.select((s) => s.banner));
-    final String name = ref.watch(gameUiStateProvider.select((s) => s.player.name));
+    // Read where it is shown rather than carried in the game state: renaming repaints this line
+    // instead of rebuilding the notifier and discarding the round in progress.
+    final String name = ref.watch(playerProvider).name;
     final GameTheme theme = ref.watch(gameThemeProvider);
     final AppLocalizations l10n = context.l10n;
 
