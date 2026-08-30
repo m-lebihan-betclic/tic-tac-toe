@@ -147,7 +147,7 @@ class _ThemeChips extends ConsumerWidget {
     return Row(
       spacing: AppSpacing.spacing200,
       children: <Widget>[
-        for (final AppTheme theme in AppTheme.values)
+        for (final AppTheme theme in AppTheme.ordered)
           Expanded(
             child: AppChip(
               label: switch (theme) {
