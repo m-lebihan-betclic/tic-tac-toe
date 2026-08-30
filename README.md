@@ -23,6 +23,17 @@ mise run test
 mise run goldens
 ```
 
+**The golden baselines are macOS-local.** Font rasterisation differs between platforms, so a
+Linux run reports diffs on every one of them; there is no CI pipeline here and these do not
+pretend otherwise. Regenerate with `mise run goldens-update`, and look at every changed PNG
+before committing it — a golden you accept without opening is a baseline that pins a bug.
+
+Two things to know when reading them. Text renders as filled boxes: goldens verify layout,
+colour and assets, never glyphs. And the test font draws every character one em wide, so text
+is far wider on these captures than on a device — which is a feature, not a nuisance. It is the
+same pressure a long translation or a large Dynamic Type setting puts on a layout, and it is
+what the 320 captures exist to apply.
+
 ## Documentation
 
 - [`CONVENTIONS.md`](CONVENTIONS.md) — the architecture in one page: layers, the provider
