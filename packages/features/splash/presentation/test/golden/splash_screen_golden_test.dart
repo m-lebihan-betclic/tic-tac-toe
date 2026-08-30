@@ -47,7 +47,7 @@ void main() {
 
         await expectLater(
           find.byKey(const Key('golden')),
-          matchesGoldenFile('goldens/splash_${palette.key}_${size.key}.png'),
+          matchesGoldenFile('goldens/splash_${size.key}_${palette.key}.png'),
         );
       });
     }
