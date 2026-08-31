@@ -12,9 +12,9 @@ Three screens — Game, Settings, History — each available in three themes, sw
 </tr>
 </table>
 
-Built to a production monorepo architecture: a Dart pub workspace of small packages,
-Clean Architecture three layers deep, Riverpod 3 with code generation, and composition-root
-dependency injection.
+Built to a production monorepo architecture: a Dart pub workspace of small, feature-centric
+packages, Clean Architecture three layers deep, Riverpod 3 with code generation, and
+composition-root dependency injection.
 
 ## Run it
 
