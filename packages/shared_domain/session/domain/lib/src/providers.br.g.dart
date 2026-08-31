@@ -132,6 +132,105 @@ final class StoredPlayerProvider
 
 String _$storedPlayerHash() => r'2e65b3793b0fc93dca230a33f1b0126fa643ae99';
 
+@ProviderFor(storedRounds)
+final storedRoundsProvider = StoredRoundsProvider._();
+
+final class StoredRoundsProvider
+    extends $FunctionalProvider<List<Round>, List<Round>, List<Round>>
+    with $Provider<List<Round>> {
+  StoredRoundsProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'storedRoundsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$storedRoundsHash();
+
+  @$internal
+  @override
+  $ProviderElement<List<Round>> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  List<Round> create(Ref ref) {
+    return storedRounds(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<Round> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<Round>>(value),
+    );
+  }
+}
+
+String _$storedRoundsHash() => r'f74a4bc9dd167a9922add5a90c253736f8672064';
+
+/// The tally, derived from the rounds rather than counted beside them.
+///
+/// Two counters that must agree can disagree, and a score that drifts from the history it
+/// summarises is the kind of bug nothing catches. The board and the history screen read this same
+/// provider, so they cannot disagree either.
+
+@ProviderFor(storedScores)
+final storedScoresProvider = StoredScoresProvider._();
+
+/// The tally, derived from the rounds rather than counted beside them.
+///
+/// Two counters that must agree can disagree, and a score that drifts from the history it
+/// summarises is the kind of bug nothing catches. The board and the history screen read this same
+/// provider, so they cannot disagree either.
+
+final class StoredScoresProvider
+    extends $FunctionalProvider<Scores, Scores, Scores>
+    with $Provider<Scores> {
+  /// The tally, derived from the rounds rather than counted beside them.
+  ///
+  /// Two counters that must agree can disagree, and a score that drifts from the history it
+  /// summarises is the kind of bug nothing catches. The board and the history screen read this same
+  /// provider, so they cannot disagree either.
+  StoredScoresProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'storedScoresProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$storedScoresHash();
+
+  @$internal
+  @override
+  $ProviderElement<Scores> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  Scores create(Ref ref) {
+    return storedScores(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(Scores value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<Scores>(value),
+    );
+  }
+}
+
+String _$storedScoresHash() => r'00be87b077ee0e9bc9929de12b4e7eb3d5385cdc';
+
 @ProviderFor(storedTheme)
 final storedThemeProvider = StoredThemeProvider._();
 
@@ -301,6 +400,47 @@ final class SavePlayerProvider
 }
 
 String _$savePlayerHash() => r'18a945b36a22d4ce45e590d4e84619d562c136a7';
+
+@ProviderFor(saveRound)
+final saveRoundProvider = SaveRoundProvider._();
+
+final class SaveRoundProvider
+    extends $FunctionalProvider<SaveRoundFun, SaveRoundFun, SaveRoundFun>
+    with $Provider<SaveRoundFun> {
+  SaveRoundProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'saveRoundProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$saveRoundHash();
+
+  @$internal
+  @override
+  $ProviderElement<SaveRoundFun> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  SaveRoundFun create(Ref ref) {
+    return saveRound(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(SaveRoundFun value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<SaveRoundFun>(value),
+    );
+  }
+}
+
+String _$saveRoundHash() => r'd6efa05be43237e28f49a0d55aad73de568ed92c';
 
 @ProviderFor(saveTheme)
 final saveThemeProvider = SaveThemeProvider._();

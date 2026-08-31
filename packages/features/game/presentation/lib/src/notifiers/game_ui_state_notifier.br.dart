@@ -18,10 +18,6 @@ class GameUiStateNotifier extends _$GameUiStateNotifier {
   /// The CPU's thinking beat. Presentation, not a rule — the domain plays instantly.
   Timer? _beat;
 
-  /// Every round finished this session. [Scores] is derived from it rather than counted
-  /// alongside it, so the tally cannot drift from the history it summarises.
-  final List<Round> _rounds = <Round>[];
-
   @override
   GameUiState build() {
     ref.onDispose(_cancelBeat);
@@ -29,7 +25,6 @@ class GameUiStateNotifier extends _$GameUiStateNotifier {
     return GameUiState(
       banner: const StatusBanner.turn(),
       game: ref.read(startRoundProvider)(difficulty: _storedDifficulty),
-      scores: const Scores(),
     );
   }
 
@@ -76,7 +71,10 @@ class GameUiStateNotifier extends _$GameUiStateNotifier {
       case CpuTurn():
         _scheduleBeat(game);
       case Finished(:final GameOutcome outcome, :final Set<WinningLine> winningLines):
-        _rounds.add(
+        // Written through the contract, not kept here. The board is one round; the session's
+        // history outlives it, and the screen that renders it must not have to reach into this
+        // notifier to see it. The tally follows from the same write, because it is derived.
+        ref.read(saveRoundProvider)(
           Round(
             difficulty: game.difficulty,
             moveCount: game.board.moveCount,
@@ -84,7 +82,6 @@ class GameUiStateNotifier extends _$GameUiStateNotifier {
             winningLines: winningLines,
           ),
         );
-        state = state.copyWith(scores: Scores.fromRounds(_rounds));
       case PlayerTurn():
         break;
     }

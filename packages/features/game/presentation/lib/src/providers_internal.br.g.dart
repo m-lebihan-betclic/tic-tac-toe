@@ -67,7 +67,7 @@ final class DefaultGameThemeProvider
   }
 }
 
-String _$defaultGameThemeHash() => r'eec027640af6b244fa7f156de0fbe254e25c6e42';
+String _$defaultGameThemeHash() => r'f0253914673f4b69056d6c0d4d8c0d48f70dc023';
 
 /// How long the CPU appears to think, drawn fresh each turn from
 /// [AppMotion.cpuThinkingMin]..[AppMotion.cpuThinkingDelay] in [AppMotion.cpuThinkingStep]

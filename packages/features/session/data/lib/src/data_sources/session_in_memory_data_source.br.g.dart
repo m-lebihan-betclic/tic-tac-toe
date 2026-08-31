@@ -69,7 +69,7 @@ final class SessionInMemoryDataSourceProvider
 }
 
 String _$sessionInMemoryDataSourceHash() =>
-    r'e4dbb35a4af2599eeb54a5a7e14590f0e3e4d6aa';
+    r'0042add1fbb6894b3445824327deebb81a5cb8e8';
 
 /// The session, held in memory for the life of the process.
 ///

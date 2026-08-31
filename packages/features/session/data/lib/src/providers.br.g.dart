@@ -14,14 +14,66 @@ part of 'providers.br.dart';
 /// everything downstream. That is the whole notification chain: store → repository → the domain's
 /// read providers → the screen.
 
-@ProviderFor(playerRepository)
-final playerRepositoryProvider = PlayerRepositoryProvider._();
+@ProviderFor(historyRepository)
+final historyRepositoryProvider = HistoryRepositoryProvider._();
 
 /// The public implementation providers, typed as the *domain* interfaces.
 ///
 /// Both watch the store's state as well as reading its notifier, so a write rebuilds them and
 /// everything downstream. That is the whole notification chain: store → repository → the domain's
 /// read providers → the screen.
+
+final class HistoryRepositoryProvider
+    extends
+        $FunctionalProvider<
+          HistoryRepository,
+          HistoryRepository,
+          HistoryRepository
+        >
+    with $Provider<HistoryRepository> {
+  /// The public implementation providers, typed as the *domain* interfaces.
+  ///
+  /// Both watch the store's state as well as reading its notifier, so a write rebuilds them and
+  /// everything downstream. That is the whole notification chain: store → repository → the domain's
+  /// read providers → the screen.
+  HistoryRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'historyRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$historyRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<HistoryRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  HistoryRepository create(Ref ref) {
+    return historyRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(HistoryRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<HistoryRepository>(value),
+    );
+  }
+}
+
+String _$historyRepositoryHash() => r'2bc6e6569c639c13bda01188f491d2f470fd1495';
+
+@ProviderFor(playerRepository)
+final playerRepositoryProvider = PlayerRepositoryProvider._();
 
 final class PlayerRepositoryProvider
     extends
@@ -31,11 +83,6 @@ final class PlayerRepositoryProvider
           PlayerRepository
         >
     with $Provider<PlayerRepository> {
-  /// The public implementation providers, typed as the *domain* interfaces.
-  ///
-  /// Both watch the store's state as well as reading its notifier, so a write rebuilds them and
-  /// everything downstream. That is the whole notification chain: store → repository → the domain's
-  /// read providers → the screen.
   PlayerRepositoryProvider._()
     : super(
         from: null,

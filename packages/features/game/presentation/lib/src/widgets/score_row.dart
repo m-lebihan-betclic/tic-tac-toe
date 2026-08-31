@@ -18,7 +18,7 @@ class ScoreRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Difficulty difficulty = ref.watch(gameUiStateProvider.select((s) => s.game.difficulty));
-    final Scores scores = ref.watch(gameUiStateProvider.select((s) => s.scores));
+    final Scores scores = ref.watch(storedScoresProvider);
     // On the result screen the counter that just moved is coloured; the other two stay plain.
     final GameOutcome? justEnded = ref.watch(
       gameUiStateProvider.select(

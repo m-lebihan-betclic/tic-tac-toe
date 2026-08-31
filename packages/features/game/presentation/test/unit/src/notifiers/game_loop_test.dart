@@ -40,6 +40,18 @@ final class _EmptyPreferences implements PreferencesRepository {
   void writeTheme(AppTheme theme) {}
 }
 
+/// Rounds, in a list. The board writes finished ones through the contract now, so a test that
+/// leaves it unfed gets the loud failure the design intends — which is what this is here to feed.
+final class _SessionHistory implements HistoryRepository {
+  final List<Round> _rounds = <Round>[];
+
+  @override
+  List<Round> read() => _rounds;
+
+  @override
+  void write(Round round) => _rounds.insert(0, round);
+}
+
 final class _NoopRouting implements game_presentation.GameRouting {
   const _NoopRouting();
 
@@ -59,6 +71,7 @@ ProviderContainer _container() => ProviderContainer(
     // Only the direct dependency, and through the public seam: the board reads the level through
     // `session_domain`, so that is what a test feeds — never a `providers_di` symbol.
     ...session_domain.bindProviders(
+      history: Provider<HistoryRepository>((ref) => _SessionHistory()),
       preferences: Provider<PreferencesRepository>((ref) => const _EmptyPreferences()),
     ),
     ...game_presentation.bindProviders(

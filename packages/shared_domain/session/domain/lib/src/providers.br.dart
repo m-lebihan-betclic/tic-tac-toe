@@ -2,15 +2,19 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:session_domain/src/behaviors/read_difficulty.dart';
 import 'package:session_domain/src/behaviors/read_locale.dart';
 import 'package:session_domain/src/behaviors/read_player.dart';
+import 'package:session_domain/src/behaviors/read_rounds.dart';
 import 'package:session_domain/src/behaviors/read_theme.dart';
 import 'package:session_domain/src/behaviors/save_difficulty.dart';
 import 'package:session_domain/src/behaviors/save_locale.dart';
 import 'package:session_domain/src/behaviors/save_player.dart';
+import 'package:session_domain/src/behaviors/save_round.dart';
 import 'package:session_domain/src/behaviors/save_theme.dart';
 import 'package:session_domain/src/entities/app_locale.dart';
 import 'package:session_domain/src/entities/app_theme.dart';
 import 'package:session_domain/src/entities/difficulty.dart';
 import 'package:session_domain/src/entities/player.dart';
+import 'package:session_domain/src/entities/round.br.dart';
+import 'package:session_domain/src/entities/scores.br.dart';
 import 'package:session_domain/src/providers_di.br.dart';
 import 'package:session_domain/src/repositories/history_repository.dart';
 import 'package:session_domain/src/repositories/player_repository.dart';
@@ -49,6 +53,7 @@ List<Override> bindProviders({
 typedef SaveDifficultyFun = void Function(Difficulty difficulty);
 typedef SaveLocaleFun = void Function(AppLocale locale);
 typedef SavePlayerFun = void Function(Player player);
+typedef SaveRoundFun = void Function(Round round);
 typedef SaveThemeFun = void Function(AppTheme theme);
 
 @riverpod
@@ -61,6 +66,17 @@ AppLocale? storedLocale(Ref ref) => ReadLocale(preferences: ref.watch(preference
 Player? storedPlayer(Ref ref) => ReadPlayer(player: ref.watch(playerRepositoryProvider))();
 
 @riverpod
+List<Round> storedRounds(Ref ref) => ReadRounds(history: ref.watch(historyRepositoryProvider))();
+
+/// The tally, derived from the rounds rather than counted beside them.
+///
+/// Two counters that must agree can disagree, and a score that drifts from the history it
+/// summarises is the kind of bug nothing catches. The board and the history screen read this same
+/// provider, so they cannot disagree either.
+@riverpod
+Scores storedScores(Ref ref) => Scores.fromRounds(ref.watch(storedRoundsProvider));
+
+@riverpod
 AppTheme? storedTheme(Ref ref) => ReadTheme(preferences: ref.watch(preferencesRepositoryProvider))();
 
 @riverpod
@@ -71,6 +87,9 @@ SaveLocaleFun saveLocale(Ref ref) => SaveLocale(preferences: ref.watch(preferenc
 
 @riverpod
 SavePlayerFun savePlayer(Ref ref) => SavePlayer(player: ref.watch(playerRepositoryProvider)).call;
+
+@riverpod
+SaveRoundFun saveRound(Ref ref) => SaveRound(history: ref.watch(historyRepositoryProvider)).call;
 
 @riverpod
 SaveThemeFun saveTheme(Ref ref) => SaveTheme(preferences: ref.watch(preferencesRepositoryProvider)).call;

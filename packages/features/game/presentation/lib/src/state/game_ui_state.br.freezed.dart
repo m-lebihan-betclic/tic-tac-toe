@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$GameUiState {
 
- StatusBanner get banner; Game get game; Scores get scores;
+ StatusBanner get banner; Game get game;
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $GameUiStateCopyWith<GameUiState> get copyWith => _$GameUiStateCopyWithImpl<Game
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameUiState&&(identical(other.banner, banner) || other.banner == banner)&&(identical(other.game, game) || other.game == game)&&(identical(other.scores, scores) || other.scores == scores));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GameUiState&&(identical(other.banner, banner) || other.banner == banner)&&(identical(other.game, game) || other.game == game));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,banner,game,scores);
+int get hashCode => Object.hash(runtimeType,banner,game);
 
 @override
 String toString() {
-  return 'GameUiState(banner: $banner, game: $game, scores: $scores)';
+  return 'GameUiState(banner: $banner, game: $game)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $GameUiStateCopyWith<$Res>  {
   factory $GameUiStateCopyWith(GameUiState value, $Res Function(GameUiState) _then) = _$GameUiStateCopyWithImpl;
 @useResult
 $Res call({
- StatusBanner banner, Game game, Scores scores
+ StatusBanner banner, Game game
 });
 
 
-$StatusBannerCopyWith<$Res> get banner;$GameCopyWith<$Res> get game;$ScoresCopyWith<$Res> get scores;
+$StatusBannerCopyWith<$Res> get banner;$GameCopyWith<$Res> get game;
 
 }
 /// @nodoc
@@ -62,12 +62,11 @@ class _$GameUiStateCopyWithImpl<$Res>
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? banner = null,Object? game = null,Object? scores = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? banner = null,Object? game = null,}) {
   return _then(_self.copyWith(
 banner: null == banner ? _self.banner : banner // ignore: cast_nullable_to_non_nullable
 as StatusBanner,game: null == game ? _self.game : game // ignore: cast_nullable_to_non_nullable
-as Game,scores: null == scores ? _self.scores : scores // ignore: cast_nullable_to_non_nullable
-as Scores,
+as Game,
   ));
 }
 /// Create a copy of GameUiState
@@ -87,15 +86,6 @@ $GameCopyWith<$Res> get game {
   
   return $GameCopyWith<$Res>(_self.game, (value) {
     return _then(_self.copyWith(game: value));
-  });
-}/// Create a copy of GameUiState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ScoresCopyWith<$Res> get scores {
-  
-  return $ScoresCopyWith<$Res>(_self.scores, (value) {
-    return _then(_self.copyWith(scores: value));
   });
 }
 }
@@ -179,10 +169,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( StatusBanner banner,  Game game,  Scores scores)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( StatusBanner banner,  Game game)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _GameUiState() when $default != null:
-return $default(_that.banner,_that.game,_that.scores);case _:
+return $default(_that.banner,_that.game);case _:
   return orElse();
 
 }
@@ -200,10 +190,10 @@ return $default(_that.banner,_that.game,_that.scores);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( StatusBanner banner,  Game game,  Scores scores)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( StatusBanner banner,  Game game)  $default,) {final _that = this;
 switch (_that) {
 case _GameUiState():
-return $default(_that.banner,_that.game,_that.scores);case _:
+return $default(_that.banner,_that.game);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -220,10 +210,10 @@ return $default(_that.banner,_that.game,_that.scores);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( StatusBanner banner,  Game game,  Scores scores)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( StatusBanner banner,  Game game)?  $default,) {final _that = this;
 switch (_that) {
 case _GameUiState() when $default != null:
-return $default(_that.banner,_that.game,_that.scores);case _:
+return $default(_that.banner,_that.game);case _:
   return null;
 
 }
@@ -235,12 +225,11 @@ return $default(_that.banner,_that.game,_that.scores);case _:
 
 
 class _GameUiState extends GameUiState {
-  const _GameUiState({required this.banner, required this.game, required this.scores}): super._();
+  const _GameUiState({required this.banner, required this.game}): super._();
   
 
 @override final  StatusBanner banner;
 @override final  Game game;
-@override final  Scores scores;
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
@@ -252,16 +241,16 @@ _$GameUiStateCopyWith<_GameUiState> get copyWith => __$GameUiStateCopyWithImpl<_
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameUiState&&(identical(other.banner, banner) || other.banner == banner)&&(identical(other.game, game) || other.game == game)&&(identical(other.scores, scores) || other.scores == scores));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _GameUiState&&(identical(other.banner, banner) || other.banner == banner)&&(identical(other.game, game) || other.game == game));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,banner,game,scores);
+int get hashCode => Object.hash(runtimeType,banner,game);
 
 @override
 String toString() {
-  return 'GameUiState(banner: $banner, game: $game, scores: $scores)';
+  return 'GameUiState(banner: $banner, game: $game)';
 }
 
 
@@ -272,11 +261,11 @@ abstract mixin class _$GameUiStateCopyWith<$Res> implements $GameUiStateCopyWith
   factory _$GameUiStateCopyWith(_GameUiState value, $Res Function(_GameUiState) _then) = __$GameUiStateCopyWithImpl;
 @override @useResult
 $Res call({
- StatusBanner banner, Game game, Scores scores
+ StatusBanner banner, Game game
 });
 
 
-@override $StatusBannerCopyWith<$Res> get banner;@override $GameCopyWith<$Res> get game;@override $ScoresCopyWith<$Res> get scores;
+@override $StatusBannerCopyWith<$Res> get banner;@override $GameCopyWith<$Res> get game;
 
 }
 /// @nodoc
@@ -289,12 +278,11 @@ class __$GameUiStateCopyWithImpl<$Res>
 
 /// Create a copy of GameUiState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? banner = null,Object? game = null,Object? scores = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? banner = null,Object? game = null,}) {
   return _then(_GameUiState(
 banner: null == banner ? _self.banner : banner // ignore: cast_nullable_to_non_nullable
 as StatusBanner,game: null == game ? _self.game : game // ignore: cast_nullable_to_non_nullable
-as Game,scores: null == scores ? _self.scores : scores // ignore: cast_nullable_to_non_nullable
-as Scores,
+as Game,
   ));
 }
 
@@ -315,15 +303,6 @@ $GameCopyWith<$Res> get game {
   
   return $GameCopyWith<$Res>(_self.game, (value) {
     return _then(_self.copyWith(game: value));
-  });
-}/// Create a copy of GameUiState
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ScoresCopyWith<$Res> get scores {
-  
-  return $ScoresCopyWith<$Res>(_self.scores, (value) {
-    return _then(_self.copyWith(scores: value));
   });
 }
 }

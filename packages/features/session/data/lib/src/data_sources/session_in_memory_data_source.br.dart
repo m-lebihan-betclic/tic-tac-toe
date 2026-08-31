@@ -22,6 +22,10 @@ class SessionInMemoryDataSource extends _$SessionInMemoryDataSource {
 
   void writeLocale(AppLocale locale) => state = state.copyWith(locale: locale);
 
+  /// Prepended, not appended: newest first is the order the history is read in, so the list is
+  /// kept that way rather than reversed by every reader.
+  void writeRound(Round round) => state = state.copyWith(rounds: <Round>[round, ...state.rounds]);
+
   void writePlayer(Player player) => state = state.copyWith(player: player);
 
   void writeTheme(AppTheme theme) => state = state.copyWith(theme: theme);

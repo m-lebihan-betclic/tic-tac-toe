@@ -14,7 +14,9 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SessionSnapshot {
 
- Difficulty? get difficulty; AppLocale? get locale; Player? get player; AppTheme? get theme;
+ Difficulty? get difficulty; AppLocale? get locale; Player? get player; AppTheme? get theme;/// Newest first, which is the order the history screen renders and the only order anything
+/// asks for. Prepending is what makes that true without a sort at every read.
+ List<Round> get rounds;
 /// Create a copy of SessionSnapshot
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +27,16 @@ $SessionSnapshotCopyWith<SessionSnapshot> get copyWith => _$SessionSnapshotCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionSnapshot&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.locale, locale) || other.locale == locale)&&(identical(other.player, player) || other.player == player)&&(identical(other.theme, theme) || other.theme == theme));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is SessionSnapshot&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.locale, locale) || other.locale == locale)&&(identical(other.player, player) || other.player == player)&&(identical(other.theme, theme) || other.theme == theme)&&const DeepCollectionEquality().equals(other.rounds, rounds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,difficulty,locale,player,theme);
+int get hashCode => Object.hash(runtimeType,difficulty,locale,player,theme,const DeepCollectionEquality().hash(rounds));
 
 @override
 String toString() {
-  return 'SessionSnapshot(difficulty: $difficulty, locale: $locale, player: $player, theme: $theme)';
+  return 'SessionSnapshot(difficulty: $difficulty, locale: $locale, player: $player, theme: $theme, rounds: $rounds)';
 }
 
 
@@ -45,7 +47,7 @@ abstract mixin class $SessionSnapshotCopyWith<$Res>  {
   factory $SessionSnapshotCopyWith(SessionSnapshot value, $Res Function(SessionSnapshot) _then) = _$SessionSnapshotCopyWithImpl;
 @useResult
 $Res call({
- Difficulty? difficulty, AppLocale? locale, Player? player, AppTheme? theme
+ Difficulty? difficulty, AppLocale? locale, Player? player, AppTheme? theme, List<Round> rounds
 });
 
 
@@ -62,13 +64,14 @@ class _$SessionSnapshotCopyWithImpl<$Res>
 
 /// Create a copy of SessionSnapshot
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? difficulty = freezed,Object? locale = freezed,Object? player = freezed,Object? theme = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? difficulty = freezed,Object? locale = freezed,Object? player = freezed,Object? theme = freezed,Object? rounds = null,}) {
   return _then(_self.copyWith(
 difficulty: freezed == difficulty ? _self.difficulty : difficulty // ignore: cast_nullable_to_non_nullable
 as Difficulty?,locale: freezed == locale ? _self.locale : locale // ignore: cast_nullable_to_non_nullable
 as AppLocale?,player: freezed == player ? _self.player : player // ignore: cast_nullable_to_non_nullable
 as Player?,theme: freezed == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
-as AppTheme?,
+as AppTheme?,rounds: null == rounds ? _self.rounds : rounds // ignore: cast_nullable_to_non_nullable
+as List<Round>,
   ));
 }
 
@@ -153,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Difficulty? difficulty,  AppLocale? locale,  Player? player,  AppTheme? theme)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Difficulty? difficulty,  AppLocale? locale,  Player? player,  AppTheme? theme,  List<Round> rounds)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _SessionSnapshot() when $default != null:
-return $default(_that.difficulty,_that.locale,_that.player,_that.theme);case _:
+return $default(_that.difficulty,_that.locale,_that.player,_that.theme,_that.rounds);case _:
   return orElse();
 
 }
@@ -174,10 +177,10 @@ return $default(_that.difficulty,_that.locale,_that.player,_that.theme);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Difficulty? difficulty,  AppLocale? locale,  Player? player,  AppTheme? theme)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Difficulty? difficulty,  AppLocale? locale,  Player? player,  AppTheme? theme,  List<Round> rounds)  $default,) {final _that = this;
 switch (_that) {
 case _SessionSnapshot():
-return $default(_that.difficulty,_that.locale,_that.player,_that.theme);case _:
+return $default(_that.difficulty,_that.locale,_that.player,_that.theme,_that.rounds);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +197,10 @@ return $default(_that.difficulty,_that.locale,_that.player,_that.theme);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Difficulty? difficulty,  AppLocale? locale,  Player? player,  AppTheme? theme)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Difficulty? difficulty,  AppLocale? locale,  Player? player,  AppTheme? theme,  List<Round> rounds)?  $default,) {final _that = this;
 switch (_that) {
 case _SessionSnapshot() when $default != null:
-return $default(_that.difficulty,_that.locale,_that.player,_that.theme);case _:
+return $default(_that.difficulty,_that.locale,_that.player,_that.theme,_that.rounds);case _:
   return null;
 
 }
@@ -209,13 +212,24 @@ return $default(_that.difficulty,_that.locale,_that.player,_that.theme);case _:
 
 
 class _SessionSnapshot implements SessionSnapshot {
-  const _SessionSnapshot({this.difficulty, this.locale, this.player, this.theme});
+  const _SessionSnapshot({this.difficulty, this.locale, this.player, this.theme, final  List<Round> rounds = const <Round>[]}): _rounds = rounds;
   
 
 @override final  Difficulty? difficulty;
 @override final  AppLocale? locale;
 @override final  Player? player;
 @override final  AppTheme? theme;
+/// Newest first, which is the order the history screen renders and the only order anything
+/// asks for. Prepending is what makes that true without a sort at every read.
+ final  List<Round> _rounds;
+/// Newest first, which is the order the history screen renders and the only order anything
+/// asks for. Prepending is what makes that true without a sort at every read.
+@override@JsonKey() List<Round> get rounds {
+  if (_rounds is EqualUnmodifiableListView) return _rounds;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_rounds);
+}
+
 
 /// Create a copy of SessionSnapshot
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +241,16 @@ _$SessionSnapshotCopyWith<_SessionSnapshot> get copyWith => __$SessionSnapshotCo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SessionSnapshot&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.locale, locale) || other.locale == locale)&&(identical(other.player, player) || other.player == player)&&(identical(other.theme, theme) || other.theme == theme));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SessionSnapshot&&(identical(other.difficulty, difficulty) || other.difficulty == difficulty)&&(identical(other.locale, locale) || other.locale == locale)&&(identical(other.player, player) || other.player == player)&&(identical(other.theme, theme) || other.theme == theme)&&const DeepCollectionEquality().equals(other._rounds, _rounds));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,difficulty,locale,player,theme);
+int get hashCode => Object.hash(runtimeType,difficulty,locale,player,theme,const DeepCollectionEquality().hash(_rounds));
 
 @override
 String toString() {
-  return 'SessionSnapshot(difficulty: $difficulty, locale: $locale, player: $player, theme: $theme)';
+  return 'SessionSnapshot(difficulty: $difficulty, locale: $locale, player: $player, theme: $theme, rounds: $rounds)';
 }
 
 
@@ -247,7 +261,7 @@ abstract mixin class _$SessionSnapshotCopyWith<$Res> implements $SessionSnapshot
   factory _$SessionSnapshotCopyWith(_SessionSnapshot value, $Res Function(_SessionSnapshot) _then) = __$SessionSnapshotCopyWithImpl;
 @override @useResult
 $Res call({
- Difficulty? difficulty, AppLocale? locale, Player? player, AppTheme? theme
+ Difficulty? difficulty, AppLocale? locale, Player? player, AppTheme? theme, List<Round> rounds
 });
 
 
@@ -264,13 +278,14 @@ class __$SessionSnapshotCopyWithImpl<$Res>
 
 /// Create a copy of SessionSnapshot
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? difficulty = freezed,Object? locale = freezed,Object? player = freezed,Object? theme = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? difficulty = freezed,Object? locale = freezed,Object? player = freezed,Object? theme = freezed,Object? rounds = null,}) {
   return _then(_SessionSnapshot(
 difficulty: freezed == difficulty ? _self.difficulty : difficulty // ignore: cast_nullable_to_non_nullable
 as Difficulty?,locale: freezed == locale ? _self.locale : locale // ignore: cast_nullable_to_non_nullable
 as AppLocale?,player: freezed == player ? _self.player : player // ignore: cast_nullable_to_non_nullable
 as Player?,theme: freezed == theme ? _self.theme : theme // ignore: cast_nullable_to_non_nullable
-as AppTheme?,
+as AppTheme?,rounds: null == rounds ? _self._rounds : rounds // ignore: cast_nullable_to_non_nullable
+as List<Round>,
   ));
 }
 

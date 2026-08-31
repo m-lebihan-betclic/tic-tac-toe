@@ -15,5 +15,9 @@ abstract class SessionSnapshot with _$SessionSnapshot {
     AppLocale? locale,
     Player? player,
     AppTheme? theme,
+
+    /// Newest first, which is the order the history screen renders and the only order anything
+    /// asks for. Prepending is what makes that true without a sort at every read.
+    @Default(<Round>[]) List<Round> rounds,
   }) = _SessionSnapshot;
 }
