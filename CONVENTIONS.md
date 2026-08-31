@@ -247,7 +247,14 @@ change fails all three themes.
 - Text renders as boxes. Goldens verify layout, colour and assets — never glyphs. A glow or a
   shadow is verified as shape and colour around a filled box, not around a letterform, so the
   running app is still the check for whether it looks right.
-- Baselines are macOS-local (they drift on Linux); commit them, and say so in the repo README.
+- The test font draws every character one em wide, so text runs far wider on a capture than on
+  a device — the same pressure a long translation or a large Dynamic Type setting puts on a
+  layout. It's what the 320 baseline exists to apply; a screen that only fits at 390 fails there
+  before a real translation ever ships.
+- Baselines are macOS-local (they drift on Linux) and there is no CI enforcing them — the
+  discipline is manual: look at every changed PNG before committing it, or a golden accepted
+  without opening is a baseline that pins a bug. Say so in the repo README, one line pointing
+  back here.
 
 ## Commands
 
