@@ -56,4 +56,4 @@ final class DefaultSettingsThemeProvider
 }
 
 String _$defaultSettingsThemeHash() =>
-    r'db7f16a0b83efa92792bf0a5b2b6e7ebbbddd863';
+    r'8195e277aea8ea2f396aa71fdb45c6022be09c18';

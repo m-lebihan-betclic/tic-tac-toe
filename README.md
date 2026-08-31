@@ -49,6 +49,7 @@ packages/
 │   │           ├── unit/src/
 │   │           └── golden/
 │   │
+│   ├── history/presentation/
 │   ├── setup/presentation/
 │   ├── settings/presentation/
 │   ├── splash/presentation/

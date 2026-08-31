@@ -100,6 +100,12 @@ enum.
 - **Never a raw colour** (`0xFF…`, `Colors.red`) or a hardcoded dimension in a feature: read the
   **feature theme** (`{feature}ThemeProvider`), which is built from the design-system tokens in
   `providers_internal.br.dart`. A feature never imports `design_tokens`' palette directly.
+- **A value derived from a shared contract lives beside the contract, not inside one feature's
+  notifier.** `Scores` is a projection of the session's finished rounds, so it is a provider in
+  `session_domain` that the board and the history screen both watch — not a field on
+  `GameUiState` recomputed from a private list. A projection held by one feature is a second
+  source of truth the moment a second feature needs it, and the two can then disagree about the
+  same session.
 - **A theme's text treatment belongs to the palette, not to each feature theme.** Matrix blooms
   its `onSurface` text; the other two do not. That is a property of the theme, so it lives on
   `AppPalette` — `onSurfaceText(style)` for text that is always `onSurface`, `glowFor(color)`

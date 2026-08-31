@@ -55,4 +55,4 @@ final class DefaultSetupThemeProvider
   }
 }
 
-String _$defaultSetupThemeHash() => r'189d4ade6e1032e961ef00883be3de9364d2d3bd';
+String _$defaultSetupThemeHash() => r'a55814243172f0e88da2c0993a4a9d10696c64dc';
