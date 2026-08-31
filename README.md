@@ -2,6 +2,16 @@
 
 Local play, human against a CPU opponent. Flutter, iOS and Android.
 
+Three screens — Game, Settings, History — each available in three themes, switchable anytime from Settings.
+
+<table>
+<tr>
+<td align="center"><img src="https://github.com/user-attachments/assets/10bb42c1-90ce-4de2-acca-69f7fe27b3f8" width="230"><br><sub><b>Game</b> · Light</sub></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/c006ca17-7783-4a38-8b20-1d8c2f121e86" width="230"><br><sub><b>Settings</b> · Dark</sub></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/c99d4ded-af1d-486a-b4a4-88faebec23a1" width="230"><br><sub><b>History</b> · Matrix</sub></td>
+</tr>
+</table>
+
 Built to a production monorepo architecture: a Dart pub workspace of small packages,
 Clean Architecture three layers deep, Riverpod 3 with code generation, and composition-root
 dependency injection.
