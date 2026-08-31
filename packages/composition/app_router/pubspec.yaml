@@ -13,6 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   game_presentation:
+  history_presentation:
   riverpod_annotation: ^4.0.2
   settings_presentation:
   setup_presentation:

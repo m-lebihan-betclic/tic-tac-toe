@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // not in the everyday barrel.
 import 'package:flutter_riverpod/misc.dart';
 import 'package:game_presentation/game_presentation.dart' as game_presentation;
+import 'package:history_presentation/history_presentation.dart' as history_presentation;
 import 'package:session_data/session_data.dart' as session_data;
 import 'package:session_domain/session_domain.dart';
 import 'package:settings_presentation/settings_presentation.dart' as settings_presentation;
@@ -30,6 +31,9 @@ List<Override> appProviders({required String version}) => [
   ...game_presentation.bindProviders(
     player: _playerProvider,
     routing: (ref) => AppGameRouting(router: ref.watch(appRouterProvider)),
+  ),
+  ...history_presentation.bindProviders(
+    routing: (ref) => AppHistoryRouting(router: ref.watch(appRouterProvider)),
   ),
   ...settings_presentation.bindProviders(
     locale: activeLocaleProvider,

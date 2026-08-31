@@ -1,5 +1,5 @@
-name: app_providers
-description: The composition root — every bindProviders() call in the app, in one list.
+name: history_presentation
+description: History feature — presentation layer.
 version: 1.0.0
 publish_to: none
 
@@ -9,24 +9,29 @@ environment:
 resolution: workspace
 
 dependencies:
-  app_router:
+  auto_route: ^11.1.0
+  design_components:
   design_providers:
   design_tokens:
+  exceptions:
   flutter:
     sdk: flutter
   flutter_riverpod: ^3.2.1
-  game_presentation:
-  history_presentation:
-  session_data:
+  flutter_svg: ^2.3.0
+  l10n:
+  riverpod_annotation: ^4.0.2
   session_domain:
-  settings_presentation:
-  setup_presentation:
-  splash_presentation:
+  theme_tailor_annotation: ^3.0.1
 
 dev_dependencies:
+  auto_route_generator: ^10.4.0
   build_runner: ^2.15.0
   flutter_test:
     sdk: flutter
   givn:
   riverpod_generator: ^4.0.3
   shouldly: ^0.5.0+1
+  theme_tailor: ^3.0.1
+
+flutter:
+  uses-material-design: true
